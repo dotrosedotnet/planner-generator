@@ -1,0 +1,37 @@
+%!PS
+%%BoundingBox: 0 0 297 420
+%%Pages: 3
+%%Page: 1 1
+% REWRITE THIS AS LINES SPANNING THE WHOLE GRID
+% rather than one square at a time
+/page-height 420 def
+/page-width 297 def
+/hours 24 def
+/hour-marking-frequency 3 def
+/hours-per-square 1 def
+/first-hour-marking 3 def
+/mm {72 mul 25.4 div} def
+/grid-height 3.5 mm def
+/grid-width 3.5 mm def
+/grid-origin-x 10 def 
+/grid-origin-y 410 def 
+/grid-upper-margin-size 10 def
+/grid-upper-margin {page-height grid-upper-margin-size sub} def
+% start with grid upper left origin
+% that's the x and y of the second node OR we can make it the first and third node
+% if it's the first and third node, then we draw one line down and one line right
+/left-vertical-line-bottom-y {
+  grid-origin-y grid-height sub
+} def
+/linewidth 0.1 def
+[0.01 1.5] 0 setdash
+/first-grid-square {
+  newpath
+  grid-origin-x grid-upper-margin moveto
+  grid-origin-x left-vertical-line-bottom-y lineto
+  linewidth setlinewidth 1 setlinecap
+  stroke
+} def
+first-grid-square
+showpage
+%%EOF
