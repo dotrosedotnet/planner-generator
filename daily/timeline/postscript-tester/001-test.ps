@@ -1,37 +1,75 @@
 %!PS
 %%BoundingBox: 0 0 297 420
-%%Pages: 3
+%%Pages: 1
 %%Page: 1 1
-% REWRITE THIS AS LINES SPANNING THE WHOLE GRID
-% rather than one square at a time
-/page-height 420 def
-/page-width 297 def
-/hours 24 def
-/hour-marking-frequency 3 def
-/hours-per-square 1 def
-/first-hour-marking 3 def
+
 /mm {72 mul 25.4 div} def
-/grid-height 3.5 mm def
-/grid-width 3.5 mm def
-/grid-origin-x 10 def 
-/grid-origin-y 410 def 
+
+% page dimensions
+/page-height 420 def % same as BoundingBox
+/page-width 297 def % same as BoundingBox
+
+% timeline hours and hour markings
+/hours 26 def
+/hour-marking-frequency 3 def
+/squares-per-hour 1 def
+/first-hour 2 def
+/first-hour-marking 3 def
+
+% cell dimensions
+/cell-height 3.5 mm def
+/cell-width 3.5 mm def
+
+% grid placement on page
 /grid-upper-margin-size 10 def
 /grid-upper-margin {page-height grid-upper-margin-size sub} def
-% start with grid upper left origin
-% that's the x and y of the second node OR we can make it the first and third node
-% if it's the first and third node, then we draw one line down and one line right
-/left-vertical-line-bottom-y {
-  grid-origin-y grid-height sub
+/grid-height {
+  cell-height hours squares-per-hour mul mul
 } def
-/linewidth 0.1 def
-[0.01 1.5] 0 setdash
-/first-grid-square {
+/grid-bottom {
+  grid-upper-margin grid-height sub
+} def
+/squares-wide { % how many squares can fit horizontally on the page
+  page-width cell-width div
+} def
+/center 0 def % set to non-zero to center grid
+/grid-left-margin-size 10 def
+/grid-left-margin-size-for-centering {
+  %page-width minus 
+} def
+/grid-left-margin {
+  center 1 eq
+  {
+    grid-left-margin-size-for-centering
+  }
+  {
+    grid-left-margin-size
+  }
+  ifelse
+} def
+
+% line features
+/linewidth 0.8 def
+[0.01 3] 0 setdash
+
+% let's draw
+/first-vertical-line {
   newpath
-  grid-origin-x grid-upper-margin moveto
-  grid-origin-x left-vertical-line-bottom-y lineto
+  grid-left-margin grid-upper-margin moveto
+  grid-left-margin grid-bottom lineto
   linewidth setlinewidth 1 setlinecap
   stroke
 } def
-first-grid-square
+first-vertical-line
+
+% draw the rest of the vertical lines
+/vertical-line-x grid-left-margin cell-width add def
+vertical-line-x cell-width page-width {
+  newpath
+  vertical-line-x grid-upper-margin moveto
+  vertical-line-x grid-bottom lineto
+  stroke
+  /vertical-line-x vertical-line-x cell-width add def
+} for
 showpage
 %%EOF
