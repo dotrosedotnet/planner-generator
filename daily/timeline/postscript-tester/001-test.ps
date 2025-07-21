@@ -3,11 +3,17 @@
 %%Pages: 1
 %%Page: 1 1
 
+%TODO: implement max-width, based on a variable called 'minimum-left-margin'. this will allow us to implement centering, I think. The grid-width needs to be calculated after margins are taken into account. eventually line dashes will need to be calculated by cell-height
+
 /mm {72 mul 25.4 div} def
 
 % page dimensions
 /page-height 420 def % same as BoundingBox
 /page-width 297 def % same as BoundingBox
+
+% line features
+/linewidth 0.8 def
+[0.01 3] 0 setdash
 
 % timeline hours and hour markings
 /hours 26 def
@@ -30,12 +36,19 @@
   grid-upper-margin grid-height sub
 } def
 /squares-wide { % how many squares can fit horizontally on the page
-  page-width cell-width div
+  page-width cell-width div cvi
 } def
-/center 0 def % set to non-zero to center grid
+/grid-width {
+  squares-wide cell-width mul
+}
+/max-width 0 def % if max-width is set to 1, side-margin is set to minimum-side-margin
+/center 0 def % set to 1 to center grid
+/side-margin-total-maximum {
+  page-width grid-width sub
+}
 /grid-left-margin-size 10 def
 /grid-left-margin-size-for-centering {
-  %page-width minus 
+  side-margin-total-maximum 2 div
 } def
 /grid-left-margin {
   center 1 eq
@@ -48,9 +61,6 @@
   ifelse
 } def
 
-% line features
-/linewidth 0.8 def
-[0.01 3] 0 setdash
 
 % let's draw
 /first-vertical-line {
