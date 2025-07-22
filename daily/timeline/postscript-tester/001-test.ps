@@ -3,13 +3,7 @@
 %%Pages: 1
 %%Page: 1 1
 
-%TODO: implement max-grid-width, based on a
-% variable called 'minimum-left-margin'. this will
-% allow us to implement centering, I think. The
-% grid-width needs to be calculated after margins
-% are taken into account.
-
-%TODO: control flow. maybe in my notebook.
+%TODO: grid width can be determined by minimum-margins and minimum-row-length
 
 % creates mm unit
 /mm {72 mul 25.4 div} def
@@ -33,13 +27,15 @@
 /cell-height 3.5 mm def
 /cell-width 3.5 mm def
 
-% grid placement on page
-/center 1 def % set to 1 to center grid on page
-/max-width-grid 1 def % if max-width is set to 1, grid-left-margin-size is set to grid-minimum-left-margin
+% grid size
+/max-width-grid 0 def % if max-width is set to 1, grid-left-margin-size is set to grid-minimum-left-margin
 /grid-minimum-left-margin 4 mm def
-/grid-maximum-left-margin 4 mm def
+% /grid-maximum-left-margin 4 mm def
 /grid-minimum-right-margin 4 mm def
-/grid-maximum-right-margin 4 mm def
+% /grid-maximum-right-margin 4 mm def
+
+% grid placement on page
+/center-horizontally 0 def % set to 1 to center grid on page
 /grid-top-margin-size 10 def
 /grid-top-margin {page-height grid-top-margin-size sub} def
 /grid-height {
@@ -50,11 +46,19 @@
 } def
 % squares-wide and grid-width must take left-margin into account
 /squares-wide { % how many squares can fit horizontally on the page
-  page-width grid-minimum-left-margin sub cell-width div ceiling
+  page-width grid-minimum-left-margin sub grid-minimum-right-margin sub cell-width div ceiling
   % 85
 } def
+/total-side-margin {
+  max-grid-width 1 eq
+  {
+    grid-minimum-left-margin grid-minimum-right-margin add
+  }
+  {
+    grid-maximum-left-margin grid-maximum-right-margin add
+  } ifelse
+}
 /grid-width {
-  /total-side-margin { grid-minimum-left-margin 2 mul } def
   page-width total-side-margin sub
   % squares-wide cell-width mul
 } def
@@ -71,7 +75,7 @@
     grid-minimum-left-margin
   }
   {
-    center 1 eq
+    center-horizontally 1 eq
     {
       grid-left-margin-size-for-centering
     }
@@ -96,7 +100,7 @@ first-vertical-line
 
 % draw the rest of the vertical lines
 /vertical-line-x grid-left-margin cell-width add def
-vertical-line-x cell-width page-width {
+vertical-line-x cell-width grid-width {
   newpath
   vertical-line-x grid-top-margin moveto
   vertical-line-x grid-bottom lineto
