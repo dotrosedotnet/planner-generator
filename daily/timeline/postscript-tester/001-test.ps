@@ -16,7 +16,7 @@
 /linewidth 0.8 def
 [0.01 3] 0 setdash
 
-% timeline hours and hour markings
+% timeline hours, and hour markings
 /hours 26 def
 /hour-marking-frequency 3 def
 /squares-per-hour 1 def
@@ -28,13 +28,36 @@
 /cell-width 3.5 mm def
 
 % grid size
-/max-width-grid 0 def % if max-width is set to 1, grid-left-margin-size is set to grid-minimum-left-margin
+/max-width-grid 0 def % if max-width is set to 1, grid-left and -right are set to minimum
 /grid-minimum-left-margin 4 mm def
-% /grid-maximum-left-margin 4 mm def
 /grid-minimum-right-margin 4 mm def
-% /grid-maximum-right-margin 4 mm def
+/max-row-length 11 def % length in cells
+  % options wanted:
+  % centered, not max width
+  %   the grid is centered, it is as wide as max-row-length
+  % not centered, not max width
+  %   the grid is max-row-length unless minimum margins limits width, then it is max-width
+  % centered, max width
+  %   grid is as wide as min-margins allows, and centered
+  % not centered, max width
+  %   grid is not centered, and as wide as min-margins would allow
 
 % grid placement on page
+/grid-alignment 128 string def
+/grid-alignments
+<<
+  /left     { (justify-left)  = }
+  /center   { (center-grid)   = }
+  /right    { (justify-right) = }
+>> def
+/handle-alignments
+{
+  //grid-alignments exch
+  2 copy known not
+  { pop /center } if
+  get exec
+} bind def
+%TODO: replace this with grid-justify dict
 /center-horizontally 0 def % set to 1 to center grid on page
 /grid-top-margin-size 10 def
 /grid-top-margin {page-height grid-top-margin-size sub} def
@@ -44,30 +67,32 @@
 /grid-bottom {
   grid-top-margin grid-height sub
 } def
-% squares-wide and grid-width must take left-margin into account
 /squares-wide { % how many squares can fit horizontally on the page
-  page-width grid-minimum-left-margin sub grid-minimum-right-margin sub cell-width div ceiling
+  page-width grid-minimum-left-margin grid-minimum-right-margin sub sub cell-width div ceiling
   % 85
 } def
+/max-grid-width { % maximum width <- max row length
+  max-row-length cell-width mul
+} def
 /total-side-margin {
-  max-grid-width 1 eq
+  max-width-grid 1 eq
   {
     grid-minimum-left-margin grid-minimum-right-margin add
   }
   {
-    grid-maximum-left-margin grid-maximum-right-margin add
-  } ifelse
-}
+    page-width max-grid-width sub
+  }
+  ifelse
+} def
+%TODO: does this take center and max-width into
+% account? vvv
 /grid-width {
   page-width total-side-margin sub
-  % squares-wide cell-width mul
 } def
-/side-margin-total-maximum {
-  page-width grid-width sub
-} def
+%TODO: what's happening here? vvv
 /grid-left-margin-size 15 mm def
 /grid-left-margin-size-for-centering {
-  side-margin-total-maximum 2 div cvi
+  total-side-margin 2 div cvi
 } def
 /grid-left-margin {
   max-width-grid 1 eq
@@ -98,7 +123,6 @@
 } def
 first-vertical-line
 
-% draw the rest of the vertical lines
 /vertical-line-x grid-left-margin cell-width add def
 vertical-line-x cell-width grid-width {
   newpath
@@ -107,5 +131,15 @@ vertical-line-x cell-width grid-width {
   stroke
   /vertical-line-x vertical-line-x cell-width add def
 } for
+
+% draw the rest of the vertical lines
+% /vertical-line-x grid-left-margin cell-width add def
+% vertical-line-x cell-width grid-width {
+%   newpath
+%   vertical-line-x grid-top-margin moveto
+%   vertical-line-x grid-bottom lineto
+%   stroke
+%   /vertical-line-x vertical-line-x cell-width add def
+% } for
 showpage
 %%EOF
