@@ -3,13 +3,20 @@
 %%Pages: 1
 %%Page: 1 1
 
-%TODO: implement max-width, based on a variable called 'minimum-left-margin'. this will allow us to implement centering, I think. The grid-width needs to be calculated after margins are taken into account. eventually line dashes will need to be calculated by cell-height
+%TODO: implement max-grid-width, based on a
+% variable called 'minimum-left-margin'. this will
+% allow us to implement centering, I think. The
+% grid-width needs to be calculated after margins
+% are taken into account.
 
+%TODO: control flow. maybe in my notebook.
+
+% creates mm unit
 /mm {72 mul 25.4 div} def
 
 % page dimensions
-/page-height 420 def % same as BoundingBox
 /page-width 297 def % same as BoundingBox
+/page-height 420 def % same as BoundingBox
 
 % line features
 /linewidth 0.8 def
@@ -27,36 +34,51 @@
 /cell-width 3.5 mm def
 
 % grid placement on page
-/grid-upper-margin-size 10 def
-/grid-upper-margin {page-height grid-upper-margin-size sub} def
+/center 1 def % set to 1 to center grid on page
+/max-width-grid 1 def % if max-width is set to 1, grid-left-margin-size is set to grid-minimum-left-margin
+/grid-minimum-left-margin 4 mm def
+/grid-maximum-left-margin 4 mm def
+/grid-minimum-right-margin 4 mm def
+/grid-maximum-right-margin 4 mm def
+/grid-top-margin-size 10 def
+/grid-top-margin {page-height grid-top-margin-size sub} def
 /grid-height {
   cell-height hours squares-per-hour mul mul
 } def
 /grid-bottom {
-  grid-upper-margin grid-height sub
+  grid-top-margin grid-height sub
 } def
+% squares-wide and grid-width must take left-margin into account
 /squares-wide { % how many squares can fit horizontally on the page
-  page-width cell-width div cvi
+  page-width grid-minimum-left-margin sub cell-width div ceiling
+  % 85
 } def
 /grid-width {
-  squares-wide cell-width mul
-}
-/max-width 0 def % if max-width is set to 1, side-margin is set to minimum-side-margin
-/center 0 def % set to 1 to center grid
+  /total-side-margin { grid-minimum-left-margin 2 mul } def
+  page-width total-side-margin sub
+  % squares-wide cell-width mul
+} def
 /side-margin-total-maximum {
   page-width grid-width sub
-}
-/grid-left-margin-size 10 def
+} def
+/grid-left-margin-size 15 mm def
 /grid-left-margin-size-for-centering {
-  side-margin-total-maximum 2 div
+  side-margin-total-maximum 2 div cvi
 } def
 /grid-left-margin {
-  center 1 eq
+  max-width-grid 1 eq
   {
-    grid-left-margin-size-for-centering
+    grid-minimum-left-margin
   }
   {
-    grid-left-margin-size
+    center 1 eq
+    {
+      grid-left-margin-size-for-centering
+    }
+    {
+      grid-left-margin-size
+    }
+    ifelse
   }
   ifelse
 } def
@@ -65,7 +87,7 @@
 % let's draw
 /first-vertical-line {
   newpath
-  grid-left-margin grid-upper-margin moveto
+  grid-left-margin grid-top-margin moveto
   grid-left-margin grid-bottom lineto
   linewidth setlinewidth 1 setlinecap
   stroke
@@ -76,7 +98,7 @@ first-vertical-line
 /vertical-line-x grid-left-margin cell-width add def
 vertical-line-x cell-width page-width {
   newpath
-  vertical-line-x grid-upper-margin moveto
+  vertical-line-x grid-top-margin moveto
   vertical-line-x grid-bottom lineto
   stroke
   /vertical-line-x vertical-line-x cell-width add def
