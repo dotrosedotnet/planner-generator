@@ -41,7 +41,25 @@
 } def
 /max-width-grid-width {
   % calculates width of max-width-grid TODO
-  % ( page-width - margins ) / ( max-row-length * cell-width) floor
+  % ( page-width - margins ) - ( max-row-length * cell-width) floor
+  /min-margin-total grid-minimum-left-margin grid-minimum-right-margin add def
+  /available-width page-width min-margin-total sub def
+  /desired-grid-width max-row-length cell-width mul def
+  /calculated-margin-total available-width desired-grid-width sub def
+  /largest-possible-grid {
+    % calculate largest possible grid
+    % available-width / cell-width floor
+    available-width cell-width div floor
+  } def
+  calculated-margin-total 0 lt
+  {
+    % if the desired grid is wider than the available width, fit as many columns as possible
+    largest-possible-grid
+  }
+  {
+    % if desired grid width fits, grid is as wide as max-row-length * cell-width
+    max-row-length cell-width mul
+  }
 } def
 /grid-width {
   % 3 options:
