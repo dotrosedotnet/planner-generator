@@ -1,0 +1,60 @@
+%!PS
+% /str 128 string def
+% /CompanyProcs                     % This dictionary holds our company-specific procs
+% <<                                % Note the keys are strings, not names. This is OK.
+%   (Hot Doggie Portapotties)         { (PottyProc) = }
+%   (Monstrous Heights Real Estate)   { (MonstrousProc) = }
+%   (Out of My Mind, Inc.)            { (Crazy) = }
+%   /DefaultProc                      { (Default) = }
+% >> def
+% /HandleString                     % (str) => ---
+% {
+%   //CompanyProcs exch             % Get the CompanyProcs dictionary
+%   2 copy known not                % If our company name isn't known...
+%   { pop /DefaultProc } if         % ...replace it with the name "DefaultProc"
+%   get exec                        % Get the procedure & execute it.
+% } bind def
+% /DoReports
+% {
+%   {
+%     currentfile //str readline    % Get company name from input stream TODO: what input stream?
+%     not { pop exit } if           % Leave if no more companies
+%     HandleCompany                 % Do something with this co.’s data TODO: should this be /HandleString?
+%   } loop                          % Do it all again
+% } bind def                        
+% DoReports                         % Invoke the report procedure
+% Hot Doggie Portapotties           % Data.
+% Albequerque Turkey                % Usually, each company name would be TODO
+% Monstrous Heights Real Estate     % followed by data specific to that
+% Out of My Mind, Inc.              % company.
+% Gorilla My Dreams Parties
+
+/str 128 string def
+/directions                     % This dictionary holds our company-specific procs
+<<                                % Note the keys are strings, not names. This is OK.
+  /down                           { /down_one = 1 sub }
+  /up                             { /up_one = 1 add }
+  /same                           { /stay_same = pop }
+  /default                        { /times_two = 2 mul }
+>> def
+/HandleString                     % (str) => ---
+{
+  //directions exch               % Get the CompanyProcs dictionary
+  2 copy known not                % If our company name isn't known...
+  { pop /default } if             % ...replace it with the name "DefaultProc"
+  get exec                        % Get the procedure & execute it.
+} bind def
+/change_numbers
+{
+  {
+    currentfile //str readline    % Get company name from input stream TODO: what input stream?
+    not { pop exit } if           % Leave if no more companies
+    HandleString                  % Do something with this co.’s data TODO: should this be /HandleString?
+  } loop                          % Do it all again
+} bind def                        
+change_numbers                    % Invoke the report procedure
+/down                            % Data.
+/up                              % Usually, each company name would be TODO
+/same                            % followed by data specific to that
+/default                           % company.
+Gorilla My Dreams Parties
