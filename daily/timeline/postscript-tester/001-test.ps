@@ -32,31 +32,79 @@
 /grid-minimum-left-margin 4 mm def
 /grid-minimum-right-margin 4 mm def
 /max-row-length 11 def % length in cells
-  % options wanted:
-  % centered, not max width
-  %   the grid is centered, it is as wide as max-row-length
-  % not centered, not max width
-  %   the grid is max-row-length unless minimum margins limits width, then it is max-width
-  % centered, max width
-  %   grid is as wide as min-margins allows, and centered
-  % not centered, max width
-  %   grid is not centered, and as wide as min-margins would allow
 
 % grid placement on page
-/grid-alignment 128 string def
-/grid-alignments
-<<
-  /left     { (justify-left)  = }
-  /center   { (center-grid)   = }
-  /right    { (justify-right) = }
->> def
-/handle-alignments
-{
-  //grid-alignments exch
-  2 copy known not
-  { pop /center } if
-  get exec
-} bind def
+/alignment { % choose one
+  /center
+  % /left
+  % /right
+} def
+/max-width-grid-width {
+  % calculates width of max-width-grid TODO
+  % ( page-width - margins ) / ( max-row-length * cell-width) floor
+} def
+/grid-width {
+  % 3 options:
+  % - max-width-grid on
+  % - max-width-grid off
+  % - max-row-length is larger than page can accomodate
+  max-width-grid 1 eq
+  {
+    max-width-grid-width
+  }
+  {
+    % if max-row-length * cell-width > page-width
+    max-row-length cell-width mul page-width gt
+    {
+      max-width-grid-width
+    }
+    {
+      % max-row-length * cell-width
+      max-row-length cell-width mul
+    } ifelse
+  } ifelse
+} def
+/grid-left-margin-center {
+  max-grid-width 1 eq
+  {
+    grid-minimum-left-margin grid-minimum-right-margin add 2 div
+  }
+  {
+    % if max-grid-width is off, account for max-row-length TODO
+  } ifelse
+} def
+/grid-left-margin-left {
+  grid-minimum-left-margin
+} def
+/grid-left-margin-right {
+  %TODO: needs grid-width calculated
+  page-width grid-width grid-minimum-right-margin sub sub
+} def
+/grid-left-margin {
+  alignment /center eq
+  {
+    % left margin is half of possible margin
+    grid-left-margin-center
+  }
+  {
+    alignment /left eq
+    {
+      % left margin is minimized
+      grid-left-margin-left
+    }
+    {
+      alignment /right eq
+      {
+        % left margin is maximized
+        grid-left-margin-right
+      }
+      {
+        % default to centering behavior
+        grid-left-margin-center
+      } ifelse
+    } ifelse
+  } ifelse
+} def
 %TODO: replace this with grid-justify dict
 /center-horizontally 0 def % set to 1 to center grid on page
 /grid-top-margin-size 10 def
@@ -112,7 +160,6 @@
   ifelse
 } def
 
-
 % let's draw
 /first-vertical-line {
   newpath
@@ -141,5 +188,6 @@ vertical-line-x cell-width grid-width {
 %   stroke
 %   /vertical-line-x vertical-line-x cell-width add def
 % } for
+
 showpage
 %%EOF
