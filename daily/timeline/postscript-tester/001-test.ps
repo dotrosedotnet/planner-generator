@@ -28,10 +28,10 @@
 /cell-width 3.5 mm def
 
 % grid size
-/max-width-grid 0 def % if max-width is set to 1, grid-left and -right are set to minimum
+/max-width-grid false def % if max-width is set to true, grid-left and -right are set to minimum
 /grid-minimum-left-margin 4 mm def
 /grid-minimum-right-margin 4 mm def
-/max-row-length 21 def % length in cells
+/max-row-length 17 def % length in cells
 
 % grid placement on page
 /alignment { % choose one
@@ -66,7 +66,7 @@
   % - max-width-grid on
   % - max-width-grid off
   % - max-row-length is larger than page can accomodate
-  max-width-grid 1 eq
+  max-width-grid true eq
   {
     max-width-grid-width
   }
@@ -127,7 +127,9 @@
 /grid-bottom {
   grid-top-margin grid-height sub
 } def
+
 % let's draw
+% let's make this one 'for' loop, utilizing the count as a multiplier
 /first-vertical-line {
   newpath
   grid-left-margin grid-top-margin moveto
@@ -145,6 +147,8 @@ vertical-line-x cell-width grid-width {
   stroke
   /vertical-line-x vertical-line-x cell-width add def
 } for
+
+vertical-line-x
 
 showpage
 %%EOF
