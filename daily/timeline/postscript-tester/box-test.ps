@@ -1,0 +1,22 @@
+%!
+
+/box { % x y w h   %create a path in the shape of a box w*h with lower left corner at x,y
+    4 2 roll moveto
+    exch dup 3 1 roll
+    0 rlineto
+    0 exch rlineto
+    neg 0 rlineto
+    closepath
+} def
+
+/Courier 10 selectfont
+100 100 100 100 box stroke   % draw an oriented box
+120 120 moveto (inside) show
+gsave
+    150 129.5 translate   % make the center of the box the new 0,0 point
+    45 rotate   % rotate CCW 45 degrees
+    0 0 100 100 box stroke   % a rotated, shifted box
+    20 20 moveto (inside) show
+grestore
+100 200 100 100 box stroke   % another box, just north of the first, in the original coordinte system
+120 220 moveto (inside) show
