@@ -1,0 +1,46 @@
+%!PS
+%%BoundingBox 0 0 150 225
+
+/cross {
+  newpath
+  0 -5 moveto
+  0 5 lineto
+  -5 0 moveto
+  5 0 lineto
+  stroke
+} def
+
+/scale-factor 1 2 div def
+
+/box {
+  4 2 roll moveto
+  exch dup 3 1 roll
+  0 rlineto
+  0 exch rlineto
+  neg 0 rlineto
+  closepath
+} def
+
+10 10 10 10 box stroke
+15 15 moveto (inside) show
+gsave
+  5 5 translate
+  45 rotate
+  0 0 10 10 box stroke
+  20 20 moveto (inside) show
+grestore
+60 30 translate
+scale-factor scale-factor scale
+1 setlinewidth 1 setlinecap
+/crosses 8 def
+1 1 crosses {
+  0 30 translate
+  gsave
+    -15 rotate
+    cross
+  grestore
+} for
+
+
+showpage
+
