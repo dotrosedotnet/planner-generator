@@ -1,0 +1,198 @@
+%!PS
+%%BoundingBox: 0 0 294 419 %slightly under A6
+
+% creates mm unit
+/mm {72 mul 25.4 div} def
+/cm {72 mul 2.54 div} def
+/points-to-mm {72 div 25.4 mul} def
+/points-to-cm {72 div 2.54 mul} def
+
+/concatstrings % (a) (b) -> (ab)  
+  { exch dup length    
+    2 index length add string    
+    dup dup 4 2 roll copy length
+    4 -1 roll putinterval
+  } bind def  
+
+% page dimensions
+/page-width 294 def % same as BoundingBox
+/page-height 419 def % same as BoundingBox
+
+% timeline hours, and hour markings
+/hours 26 def
+/hour-marking-frequency 3 def
+/squares-per-hour 1 def
+/first-hour 2 def
+/first-hour-marking 3 def
+
+% cell dimensions
+/cell-height 3.7 mm def
+/cell-width 3.7 mm def
+
+% grid size
+/max-width-grid false def % if max-width is set to true, grid-left and -right are set to minimum
+/desired-row-length 20 def % length in cells
+
+% grid placement on page
+/alignment { % choose one
+  % /center
+  /left
+  % /right
+} def
+
+% the control flow on the last one was absolute horseshit lol
+% this one, let's calculate everything before drawing, and draw based on calculations
+% OMG I'm running `watch` on `gs -dNODISPLAY -dBATCH 002-test.ps | tail +5` in a lower tmux pane, and I can `pstack` to that for debugging
+
+/desired-grid-width desired-row-length 1 sub cell-width mul def
+/desired-left-margin 6 def
+
+/distance-from-top {page-height exch sub} def
+/distance-from-right {page-width exch sub} def
+
+/top-margin-width 5 mm def
+/bottom-margin 5 mm def
+/left-margin 6 mm def
+/right-margin-width 6 mm def
+
+/left-side-of-grid-x 0 def
+/top-of-grid-y top-margin-width distance-from-top def
+
+/max-right-side-of-grid-x right-margin-width distance-from-right def
+/max-bottom-of-grid-y bottom-margin def
+
+% saves list of x placements of vertical lines
+left-side-of-grid-x cell-width max-right-side-of-grid-x {
+} for
+count
+array
+astore
+/lines-x exch def
+
+/row-cell-count {
+  % if desired-grid-width (+ left-margin) is wider than page,
+  % set the row length to maximum cells that can fit across page
+  max-width-grid true eq
+  {
+    lines-x length 1 sub
+  }
+  {
+    page-width desired-grid-width left-side-of-grid-x right-margin-width add add gt
+    {
+      desired-row-length 1 sub
+    }
+    {
+      lines-x length 1 sub
+    } ifelse
+  } ifelse
+} def
+
+/grid-width {
+  row-cell-count cell-width mul
+} def
+
+/right-side-of-grid-x {
+  grid-width
+} def
+
+/max-grid-height { page-height top-margin-width bottom-margin sub sub } def
+/calculated-grid-height {
+  squares-per-hour hours mul cell-height mul
+} def
+
+/column-cell-count {
+  % if calculated grid height is taller than page-height,
+  % set the column cell count to maximum cells that fit on page
+  calculated-grid-height max-grid-height lt
+  {
+    hours squares-per-hour mul
+  }
+  {
+    max-grid-height cell-height div floor
+  } ifelse
+} def
+
+/grid-height cell-height column-cell-count mul def
+/bottom-of-grid-y top-of-grid-y grid-height sub def
+
+clear
+% saves list of y placements of horizontal lines
+bottom-of-grid-y cell-height top-of-grid-y 1 add {
+} for
+count
+array
+astore
+/lines-y exch def
+
+% line features
+/linewidth 0.4 def
+/dots-per-cell-height 3 def
+linewidth setlinewidth
+0 setlinejoin
+1 setlinecap
+/dot-height 0.01 def
+[dot-height cell-height dots-per-cell-height div ] 0 setdash % TODO does dot-height need to be compensated for?
+
+/center-translation {
+  page-width grid-width sub 2 div
+} def
+
+/right-translation {
+  page-width grid-width sub right-margin-width sub
+} def
+
+% justify grid
+alignment /left eq
+{
+  left-margin 0 translate
+}
+{
+  alignment /center eq
+  {
+    center-translation 0 translate
+  }
+  {
+    right-translation 0 translate
+  } ifelse
+} ifelse
+
+% draws vertical lines
+% TODO: line draws one cell height at a time,
+% to ensure cell top and bottom are clearly defined,
+% even if dashes don't restart for each cell
+0 1 row-cell-count {
+  lines-x exch get 
+  newpath
+  dup top-of-grid-y moveto
+  dup bottom-of-grid-y lineto
+  stroke
+} for
+
+0 1 column-cell-count {
+  lines-y exch get
+  dup
+  newpath
+  left-side-of-grid-x exch moveto
+  right-side-of-grid-x exch lineto
+  stroke
+} for
+
+pstack
+
+% % draws horizontal lines
+% 0 1 column-cell-count 1 sub {
+%   /y {
+%     lines-y exch get
+%   } def
+%   newpath
+%   left-side-of-grid-x y moveto
+%   right-side-of-grid-x y lineto
+%   stroke
+%   % pop
+% } for
+%
+pstack
+
+showpage
+
+%%EOF
