@@ -124,15 +124,6 @@ array
 astore
 /lines-y exch def
 
-% line features
-/linewidth 0.4 def
-/dots-per-cell-height 3 def
-linewidth setlinewidth
-0 setlinejoin
-1 setlinecap
-/dot-height 0.01 def
-[dot-height cell-height dots-per-cell-height div ] 0 setdash % TODO does dot-height need to be compensated for?
-
 /center-translation {
   page-width grid-width sub 2 div
 } def
@@ -156,6 +147,21 @@ alignment /left eq
   } ifelse
 } ifelse
 
+% line features
+/linewidth 0.2 def
+/dots-per-cell 3 def
+linewidth setlinewidth
+0 setlinejoin
+1 setlinecap
+/dot-height 0.01 def
+[
+  cell-height dots-per-cell div 2 div
+  dup
+]
+cell-height dots-per-cell div cell-height exch 4 div add
+setdash
+% [dot-height cell-height dots-per-cell-height div ] 0 setdash % TODO does dot-height need to be compensated for?
+
 % draws vertical lines
 % TODO: line draws one cell height at a time,
 % to ensure cell top and bottom are clearly defined,
@@ -176,22 +182,6 @@ alignment /left eq
   right-side-of-grid-x exch lineto
   stroke
 } for
-
-pstack
-
-% % draws horizontal lines
-% 0 1 column-cell-count 1 sub {
-%   /y {
-%     lines-y exch get
-%   } def
-%   newpath
-%   left-side-of-grid-x y moveto
-%   right-side-of-grid-x y lineto
-%   stroke
-%   % pop
-% } for
-%
-pstack
 
 showpage
 
