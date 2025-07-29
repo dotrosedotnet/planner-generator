@@ -1,27 +1,39 @@
 %!PS
 %%BoundingBox 0 0 150 225
 
+/h-l 18 def
+/v-l 0.01 def
+
 /cross {
   newpath
-  0 -5 moveto
-  0 5 lineto
-  -5 0 moveto
-  5 0 lineto
+  1 setlinecap
+  6 setlinewidth
+  0 v-l neg moveto
+  0 v-l lineto
+  stroke
+  newpath
+  1 setlinecap
+  0.1 setlinewidth
+  h-l neg 0 moveto
+  h-l 0 lineto
   stroke
 } def
 
 /scale-factor 1 2 div def
 
-60 30 translate
 scale-factor scale-factor scale
-1 setlinewidth 1 setlinecap
-/crosses 8 def
+2.5 setlinewidth 1 setlinecap
+20 20 translate
+/vertical-spacing 23 def
+cross
+0 vertical-spacing translate
+/crosses 18 def
 1 1 crosses {
-  0 30 translate
   gsave
-    -49 rotate
+    0 index -10 mul rotate
     cross
   grestore
+  0 vertical-spacing translate
 } for
 
 
