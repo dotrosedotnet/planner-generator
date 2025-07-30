@@ -63,28 +63,11 @@ array
 astore
 /lines_x exch def
 
-% /row_cell_count {
-%   % if desired_grid_width (+ left_margin) is wider than page,
-%   % set the row length to maximum cells that can fit across page
-%   max_width_grid true eq
-%   {
-%     lines_x length 1 sub
-%   }
-%   {
-%     page_width desired_grid_width left_side_of_grid_x right_margin_width add add gt
-%     {
-%       desired_row_length 1 sub
-%     }
-%     {
-%       lines_x length 1 sub
-%     } ifelse
-%   } ifelse
-% } def
+/row_cell_count desired_row_length 1 sub def
 
-/row_cell_count desired_row_length def
-
+% why must I add 1 here?
 /grid_width {
-  row_cell_count cell_width mul
+  row_cell_count 1 add cell_width mul
 } def
 
 /right_side_of_grid_x {
@@ -108,7 +91,7 @@ astore
   } ifelse
 } def
 
-/grid_height cell_height column_cell_count mul def
+/grid_height cell_height column_cell_count 1 add mul def
 /bottom_of_grid_y top_of_grid_y grid_height sub def
 
 clear
@@ -119,29 +102,6 @@ count
 array
 astore
 /lines_y exch def
-
-/center_translation {
-  page_width grid_width sub 2 div
-} def
-
-/right_translation {
-  page_width grid_width sub right_margin_width sub
-} def
-
-% justify grid
-% alignment /left eq
-% {
-%   left_margin 0 translate
-% }
-% {
-%   alignment /center eq
-%   {
-%     center_translation 0 translate
-%   }
-%   {
-%     right_translation 0 translate
-%   } ifelse
-% } ifelse
 
 % line features
 /linewidth 0.2 def
@@ -211,17 +171,47 @@ setdash
   % /right
 } def
 
-% page_width grid_width sub 2 div
-% 0
-% translate
 
-% align-v center eq
-% {
-%   
-% }
-% {
-%
-% } ifelse
+
+% cell_width cell_height translate
+
+% horizontal alignment
+% why must I add 1 here?
+align-h /center eq
+{
+  page_width row_cell_count 1 add cell_width mul sub 2 div
+}
+{
+  align-h /left eq
+  {
+    % make it left
+    left_margin
+  }
+  {
+    % make it right
+    page_width grid_width sub right_margin_width sub
+  } ifelse
+} ifelse
+0 translate
+
+% vertical alignment
+align-v /center eq
+{
+  % center here
+  page_height grid_height sub 2 div
+}
+{
+  align-v /top eq
+  {
+    % top here
+    top_margin_width distance_from_top grid_height sub
+  }
+  {
+    % bottom here
+    bottom_margin
+  } ifelse
+} ifelse
+0 exch translate
 
 /draw_line-v {
   draw_cell-v
@@ -231,16 +221,16 @@ setdash
   } for
 } def
 
-0 1 row_cell_count {
+gsave
+% draw vertical lines
+0 1 row_cell_count 1 add {
   gsave
   draw_line-v
   grestore
   cell_width 0 translate
 } for
 clear
-
-% why must I add another cell width here
-cell_width row_cell_count mul cell_width add neg 0 translate
+grestore
 
 /draw_line-h {
   0 1 row_cell_count {
@@ -251,7 +241,10 @@ cell_width row_cell_count mul cell_width add neg 0 translate
   } for
 } def
 
-0 1 column_cell_count {
+0 cell_height neg translate
+
+% draw horizontal lines
+0 1 column_cell_count 1 add {
   gsave
   draw_line-h
   grestore
@@ -259,16 +252,15 @@ cell_width row_cell_count mul cell_width add neg 0 translate
 } for
 clear
 
-
 cell_width 2 div
 cell_height 2.27 mul neg
 translate
-
 
 0 setgray
 
 clear
 
+% draw white circles behind numbers
 gsave
   cell_width 2 div
   cell_height 3.5 div
@@ -293,6 +285,8 @@ gsave
   0 cell_height neg translate
   } for
 grestore
+
+% draw numbers
 gsave
 2 1 26 {
   /n 1 index def
