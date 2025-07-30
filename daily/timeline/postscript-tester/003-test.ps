@@ -4,34 +4,35 @@
 % creates mm unit
 /mm {72 mul 25.4 div} def
 /cm {72 mul 2.54 div} def
-/points-to-mm {72 div 25.4 mul} def
-/points-to-cm {72 div 2.54 mul} def
+/points_to_mm {72 div 25.4 mul} def
+/points_to_cm {72 div 2.54 mul} def
 
-/concatstrings % (a) (b) -> (ab)  
+/concatstrings % (a) (b) _> (ab)  
   { exch dup length    
     2 index length add string    
     dup dup 4 2 roll copy length
-    4 -1 roll putinterval
+    4 _1 roll putinterval
   } bind def  
 
 % page dimensions
-/page-width 294 def % same as BoundingBox
-/page-height 419 def % same as BoundingBox
+/page_width 294 def % same as BoundingBox
+/page_height 419 def % same as BoundingBox
 
 % timeline hours, and hour markings
-/hours 26 def
-/hour-marking-frequency 3 def
-/squares-per-hour 1 def
-/first-hour 2 def
-/first-hour-marking 3 def
+/hours 24 def
+/hour_marking_frequency 3 def
+/cells_padding_timeline 2 def
+/squares_per_hour 1 def
+/first_hour 3 def
+/first_hour_marking 3 def
 
 % cell dimensions
-/cell-height 3.7 mm def
-/cell-width 3.7 mm def
+/cell_height 3.7 mm def
+/cell_width 3.7 mm def
 
 % grid size
-/max-width-grid false def % if max-width is set to true, grid-left and -right are set to minimum
-/desired-row-length 20 def % length in cells
+/max_width_grid false def % if max_width is set to true, grid_left and _right are set to minimum
+/desired_row_length 20 def % length in cells
 
 % grid placement on page
 /alignment { % choose one
@@ -42,147 +43,273 @@
 
 % the control flow on the last one was absolute horseshit lol
 % this one, let's calculate everything before drawing, and draw based on calculations
-% OMG I'm running `watch` on `gs -dNODISPLAY -dBATCH 002-test.ps | tail +5` in a lower tmux pane, and I can `pstack` to that for debugging
+% OMG I'm running `watch` on `gs _dNODISPLAY _dBATCH 002_test.ps | tail +5` in a lower tmux pane, and I can `pstack` to that for debugging
 
-/desired-grid-width desired-row-length 1 sub cell-width mul def
-/desired-left-margin 6 def
+/desired_grid_width desired_row_length 1 sub cell_width mul def
+/desired_left_margin 6 def
 
-/distance-from-top {page-height exch sub} def
-/distance-from-right {page-width exch sub} def
+/distance_from_top {page_height exch sub} def
+/distance_from_right {page_width exch sub} def
 
-/top-margin-width 5 mm def
-/bottom-margin 5 mm def
-/left-margin 6 mm def
-/right-margin-width 6 mm def
+/top_margin_width 5 mm def
+/bottom_margin 5 mm def
+/left_margin 6 mm def
+/right_margin_width 6 mm def
 
-/left-side-of-grid-x 0 def
-/top-of-grid-y top-margin-width distance-from-top def
+/left_side_of_grid_x 0 def
+/top_of_grid_y top_margin_width distance_from_top def
 
-/max-right-side-of-grid-x right-margin-width distance-from-right def
-/max-bottom-of-grid-y bottom-margin def
+/max_right_side_of_grid_x right_margin_width distance_from_right def
+/max_bottom_of_grid_y bottom_margin def
 
 % saves list of x placements of vertical lines
-left-side-of-grid-x cell-width max-right-side-of-grid-x {
+left_side_of_grid_x cell_width max_right_side_of_grid_x {
 } for
 count
 array
 astore
-/lines-x exch def
+/lines_x exch def
 
-/row-cell-count {
-  % if desired-grid-width (+ left-margin) is wider than page,
+/row_cell_count {
+  % if desired_grid_width (+ left_margin) is wider than page,
   % set the row length to maximum cells that can fit across page
-  max-width-grid true eq
+  max_width_grid true eq
   {
-    lines-x length 1 sub
+    lines_x length 1 sub
   }
   {
-    page-width desired-grid-width left-side-of-grid-x right-margin-width add add gt
+    page_width desired_grid_width left_side_of_grid_x right_margin_width add add gt
     {
-      desired-row-length 1 sub
+      desired_row_length 1 sub
     }
     {
-      lines-x length 1 sub
+      lines_x length 1 sub
     } ifelse
   } ifelse
 } def
 
-/grid-width {
-  row-cell-count cell-width mul
+/grid_width {
+  row_cell_count cell_width mul
 } def
 
-/right-side-of-grid-x {
-  grid-width
+/right_side_of_grid_x {
+  grid_width
 } def
 
-/max-grid-height { page-height top-margin-width bottom-margin sub sub } def
-/calculated-grid-height {
-  squares-per-hour hours mul cell-height mul
+/max_grid_height { page_height top_margin_width bottom_margin sub sub } def
+/calculated_grid_height {
+  squares_per_hour hours mul cell_height mul
 } def
 
-/column-cell-count {
-  % if calculated grid height is taller than page-height,
+/column_cell_count {
+  % if calculated grid height is taller than page_height,
   % set the column cell count to maximum cells that fit on page
-  calculated-grid-height max-grid-height lt
+  calculated_grid_height max_grid_height lt
   {
-    hours squares-per-hour mul
+    hours squares_per_hour mul cells_padding_timeline add
   }
   {
-    max-grid-height cell-height div floor
+    max_grid_height cell_height div floor
   } ifelse
 } def
 
-/grid-height cell-height column-cell-count mul def
-/bottom-of-grid-y top-of-grid-y grid-height sub def
+/grid_height cell_height column_cell_count mul def
+/bottom_of_grid_y top_of_grid_y grid_height sub def
 
 clear
 % saves list of y placements of horizontal lines
-bottom-of-grid-y cell-height top-of-grid-y 1 add {
+bottom_of_grid_y cell_height top_of_grid_y 1 add {
 } for
 count
 array
 astore
-/lines-y exch def
+/lines_y exch def
 
-/center-translation {
-  page-width grid-width sub 2 div
+/center_translation {
+  page_width grid_width sub 2 div
 } def
 
-/right-translation {
-  page-width grid-width sub right-margin-width sub
+/right_translation {
+  page_width grid_width sub right_margin_width sub
 } def
 
 % justify grid
-alignment /left eq
-{
-  left-margin 0 translate
-}
-{
-  alignment /center eq
-  {
-    center-translation 0 translate
-  }
-  {
-    right-translation 0 translate
-  } ifelse
-} ifelse
+% alignment /left eq
+% {
+%   left_margin 0 translate
+% }
+% {
+%   alignment /center eq
+%   {
+%     center_translation 0 translate
+%   }
+%   {
+%     right_translation 0 translate
+%   } ifelse
+% } ifelse
 
 % line features
 /linewidth 0.2 def
-/dots-per-cell 3 def
+/dots_per_cell 10 def
 linewidth setlinewidth
 0 setlinejoin
-1 setlinecap
-/dot-height 0.01 def
+0 setlinecap
+/dot_height 0.01 def
 [
-  cell-height dots-per-cell div 2 div
+  cell_height dots_per_cell div 2 div
   dup
 ]
-cell-height dots-per-cell div cell-height exch 4 div add
+cell_height dots_per_cell div cell_height exch 4 div add
 setdash
-% [dot-height cell-height dots-per-cell-height div ] 0 setdash % TODO does dot-height need to be compensated for?
+[
+  15 20 div
+  10 20 div
+] 0 setdash
+% [dot_height cell_height dots_per_cell_height div ] 0 setdash % TODO does dot_height need to be compensated for?
 
-% draws vertical lines
-% TODO: line draws one cell height at a time,
-% to ensure cell top and bottom are clearly defined,
-% even if dashes don't restart for each cell
-0 1 row-cell-count {
-  lines-x exch get 
+/fontscale 8 def
+
+/Times-Bold findfont fontscale scalefont setfont
+cell_width 2 div cell_height 2.25 mul neg translate
+
+/center_text_in_cell_horizontally {
+  /n 1 index def
+  /str 2 string def
+  cell_width 2 div
+  n str cvs stringwidth pop 2 div sub
+  0 moveto
+} def
+
+0 cell_height 2 mul translate
+
+/draw_cell-h {
   newpath
-  dup top-of-grid-y moveto
-  dup bottom-of-grid-y lineto
+  0 cell_width moveto
+  cell_width 2 div 0 rlineto
+  cell_width 2 div 0 rmoveto
+  cell_width neg 2 div 0 rlineto
   stroke
+} def
+
+/draw_cell-v {
+  newpath
+  0 0 moveto
+  0 cell_height 2 div rlineto
+  0 cell_height 2 div rmoveto
+  0 cell_height neg 2 div rlineto
+  stroke
+} def
+
+cell_width cell_height translate
+
+/draw_line-v {
+  draw_cell-v
+  0 1 column_cell_count {
+    0 cell_height translate
+    draw_cell-v
+  } for
+} def
+
+gsave
+draw_line-v
+grestore
+0 1 row_cell_count 1 add {
+  cell_width 0 translate
+  gsave
+  draw_line-v
+  grestore
 } for
 
-0 1 column-cell-count {
-  lines-y exch get
-  dup
-  newpath
-  left-side-of-grid-x exch moveto
-  right-side-of-grid-x exch lineto
-  stroke
-} for
+cell_width row_cell_count 2 add mul neg cell_height neg translate
 
-showpage
+/draw_line-h {
+  gsave
+    draw_cell-h
+  grestore
+  0 1 row_cell_count {
+    cell_width 0 translate
+    gsave
+      draw_cell-h
+    grestore
+  } for
+} def
+
+0 1 column_cell_count 2 add {
+  gsave
+  draw_line-h
+  grestore
+  0 cell_height translate
+} for
+clear
+
+gsave
+cell_width
+cell_height 2 mul neg
+translate
+
+/grid_clipper_for_hours {
+  newpath
+  0 -3.2 moveto
+  0 6.4 rlineto
+  -5 0 moveto
+  10 0 rlineto
+  1 setgray
+  stroke
+} def
+
+% grid_clipper_for_hours
+% 0 1 hours 1 sub{
+%   0 cell_height neg translate
+%   grid_clipper_for_hours
+% } for
+grestore
+
+cell_width 2 div
+cell_height 2.27 mul neg
+translate
+
+
+0 setgray
+
+clear
+
+gsave
+  cell_width 2 div
+  cell_height 3.5 div
+  translate
+  [] 0 setdash
+  2 setlinewidth
+  /str 2 string def
+  2 1 26 {
+    /n 1 index def
+    /n n 24 mod 1 add def
+    /n n str cvs def
+    /width n stringwidth pop def
+    gsave
+      newpath
+      0 -3.5 moveto
+      0 6.4 rlineto
+      width 2 div neg 0 moveto
+      width 0 rlineto
+      1 setgray
+      stroke
+    grestore
+  0 cell_height neg translate
+  } for
+grestore
+gsave
+2 1 26 {
+  /n 1 index def
+  /n n 24 mod 1 add def
+  /n n str cvs def
+  /width n stringwidth pop def
+  0 setgray
+  gsave
+  n center_text_in_cell_horizontally
+  n show
+  grestore
+  0 cell_height neg translate
+} for
+grestore
 
 %%EOF
