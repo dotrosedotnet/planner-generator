@@ -19,10 +19,11 @@
 /page_height 419 def % same as BoundingBox
 
 % timeline hours, and hour markings
-/hours 26 def
+/hours 24 def
 /hour_marking_frequency 3 def
+/cells_padding_timeline 2 def
 /squares_per_hour 1 def
-/first_hour 2 def
+/first_hour 3 def
 /first_hour_marking 3 def
 
 % cell dimensions
@@ -105,7 +106,7 @@ astore
   % set the column cell count to maximum cells that fit on page
   calculated_grid_height max_grid_height lt
   {
-    hours squares_per_hour mul
+    hours squares_per_hour mul cells_padding_timeline add
   }
   {
     max_grid_height cell_height div floor
@@ -133,26 +134,26 @@ astore
 } def
 
 % justify grid
-alignment /left eq
-{
-  left_margin 0 translate
-}
-{
-  alignment /center eq
-  {
-    center_translation 0 translate
-  }
-  {
-    right_translation 0 translate
-  } ifelse
-} ifelse
+% alignment /left eq
+% {
+%   left_margin 0 translate
+% }
+% {
+%   alignment /center eq
+%   {
+%     center_translation 0 translate
+%   }
+%   {
+%     right_translation 0 translate
+%   } ifelse
+% } ifelse
 
 % line features
-/linewidth 0.4 def
-/dots_per_cell 3 def
+/linewidth 0.2 def
+/dots_per_cell 10 def
 linewidth setlinewidth
 0 setlinejoin
-1 setlinecap
+0 setlinecap
 /dot_height 0.01 def
 [
   cell_height dots_per_cell div 2 div
@@ -160,29 +161,155 @@ linewidth setlinewidth
 ]
 cell_height dots_per_cell div cell_height exch 4 div add
 setdash
+[
+  15 20 div
+  10 20 div
+] 0 setdash
 % [dot_height cell_height dots_per_cell_height div ] 0 setdash % TODO does dot_height need to be compensated for?
 
-% draws vertical lines
-% TODO: line draws one cell height at a time,
-% to ensure cell top and bottom are clearly defined,
-% even if dashes don't restart for each cell
-0 1 row_cell_count {
-  lines_x exch get 
+/fontscale 8 def
+
+/Times-Bold findfont fontscale scalefont setfont
+cell_width 2 div cell_height 2.25 mul neg translate
+
+/center_text_in_cell_horizontally {
+  /n 1 index def
+  /str 2 string def
+  cell_width 2 div
+  n str cvs stringwidth pop 2 div sub
+  0 moveto
+} def
+
+0 cell_height 2 mul translate
+
+/draw_cell-h {
   newpath
-  dup top_of_grid_y moveto
-  dup bottom_of_grid_y lineto
+  0 cell_width moveto
+  cell_width 2 div 0 rlineto
+  cell_width 2 div 0 rmoveto
+  cell_width neg 2 div 0 rlineto
   stroke
+} def
+
+/draw_cell-v {
+  newpath
+  0 0 moveto
+  0 cell_height 2 div rlineto
+  0 cell_height 2 div rmoveto
+  0 cell_height neg 2 div rlineto
+  stroke
+} def
+
+cell_width cell_height translate
+
+/draw_line-v {
+  draw_cell-v
+  0 1 column_cell_count {
+    0 cell_height translate
+    draw_cell-v
+  } for
+} def
+
+gsave
+draw_line-v
+grestore
+0 1 row_cell_count 1 add {
+  cell_width 0 translate
+  gsave
+  draw_line-v
+  grestore
 } for
 
-0 1 column_cell_count {
-  lines_y exch get
-  dup
-  newpath
-  left_side_of_grid_x exch moveto
-  right_side_of_grid_x exch lineto
-  stroke
-} for
+cell_width row_cell_count 2 add mul neg cell_height neg translate
 
-showpage
+/draw_line-h {
+  gsave
+    draw_cell-h
+  grestore
+  0 1 row_cell_count {
+    cell_width 0 translate
+    gsave
+      draw_cell-h
+    grestore
+  } for
+} def
+
+0 1 column_cell_count 2 add {
+  gsave
+  draw_line-h
+  grestore
+  0 cell_height translate
+} for
+clear
+
+gsave
+cell_width
+cell_height 2 mul neg
+translate
+
+/grid_clipper_for_hours {
+  newpath
+  0 -3.2 moveto
+  0 6.4 rlineto
+  -5 0 moveto
+  10 0 rlineto
+  1 setgray
+  stroke
+} def
+
+% grid_clipper_for_hours
+% 0 1 hours 1 sub{
+%   0 cell_height neg translate
+%   grid_clipper_for_hours
+% } for
+grestore
+
+cell_width 2 div
+cell_height 2.27 mul neg
+translate
+
+
+0 setgray
+
+clear
+
+gsave
+  cell_width 2 div
+  cell_height 3.5 div
+  translate
+  [] 0 setdash
+  2 setlinewidth
+  /str 2 string def
+  2 1 26 {
+    /n 1 index def
+    /n n 24 mod 1 add def
+    /n n str cvs def
+    /width n stringwidth pop def
+    gsave
+      newpath
+      0 -3.5 moveto
+      0 6.4 rlineto
+      width 2 div neg 0 moveto
+      width 0 rlineto
+      1 setgray
+      stroke
+    grestore
+  0 cell_height neg translate
+  } for
+grestore
+gsave
+2 1 26 {
+  /n 1 index def
+  /n n 24 mod 1 add def
+  /n n str cvs def
+  /width n stringwidth pop def
+  0 setgray
+  gsave
+  n center_text_in_cell_horizontally
+  n show
+  grestore
+  0 cell_height neg translate
+} for
+grestore
 
 %%EOF
