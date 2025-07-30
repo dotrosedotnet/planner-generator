@@ -34,13 +34,6 @@
 /max_width_grid false def % if max_width is set to true, grid_left and _right are set to minimum
 /desired_row_length 20 def % length in cells
 
-% grid placement on page
-/alignment { % choose one
-  % /center
-  /left
-  % /right
-} def
-
 % the control flow on the last one was absolute horseshit lol
 % this one, let's calculate everything before drawing, and draw based on calculations
 % OMG I'm running `watch` on `gs _dNODISPLAY _dBATCH 002_test.ps | tail +5` in a lower tmux pane, and I can `pstack` to that for debugging
@@ -70,23 +63,25 @@ array
 astore
 /lines_x exch def
 
-/row_cell_count {
-  % if desired_grid_width (+ left_margin) is wider than page,
-  % set the row length to maximum cells that can fit across page
-  max_width_grid true eq
-  {
-    lines_x length 1 sub
-  }
-  {
-    page_width desired_grid_width left_side_of_grid_x right_margin_width add add gt
-    {
-      desired_row_length 1 sub
-    }
-    {
-      lines_x length 1 sub
-    } ifelse
-  } ifelse
-} def
+% /row_cell_count {
+%   % if desired_grid_width (+ left_margin) is wider than page,
+%   % set the row length to maximum cells that can fit across page
+%   max_width_grid true eq
+%   {
+%     lines_x length 1 sub
+%   }
+%   {
+%     page_width desired_grid_width left_side_of_grid_x right_margin_width add add gt
+%     {
+%       desired_row_length 1 sub
+%     }
+%     {
+%       lines_x length 1 sub
+%     } ifelse
+%   } ifelse
+% } def
+
+/row_cell_count desired_row_length def
 
 /grid_width {
   row_cell_count cell_width mul
@@ -201,41 +196,62 @@ setdash
 } def
 
 % TODO: this is where the alignment will go
-cell_width cell_height translate
+
+% grid placement on page
+/align-v { % choose one
+  /center
+  % /top
+  % /bottom
+} def
+
+% grid placement on page
+/align-h { % choose one
+  /center
+  % /left
+  % /right
+} def
+
+% page_width grid_width sub 2 div
+% 0
+% translate
+
+% align-v center eq
+% {
+%   
+% }
+% {
+%
+% } ifelse
 
 /draw_line-v {
   draw_cell-v
   0 1 column_cell_count {
-    0 cell_height translate
     draw_cell-v
+    0 cell_height translate
   } for
 } def
 
-gsave
-draw_line-v
-grestore
-0 1 row_cell_count 1 add {
-  cell_width 0 translate
+0 1 row_cell_count {
   gsave
   draw_line-v
   grestore
+  cell_width 0 translate
 } for
+clear
 
-cell_width row_cell_count 2 add mul neg cell_height neg translate
+% why must I add another cell width here
+cell_width row_cell_count mul cell_width add neg 0 translate
 
 /draw_line-h {
-  gsave
-    draw_cell-h
-  grestore
   0 1 row_cell_count {
-    cell_width 0 translate
     gsave
       draw_cell-h
     grestore
+    cell_width 0 translate
   } for
 } def
 
-0 1 column_cell_count 2 add {
+0 1 column_cell_count {
   gsave
   draw_line-h
   grestore
@@ -243,27 +259,6 @@ cell_width row_cell_count 2 add mul neg cell_height neg translate
 } for
 clear
 
-gsave
-cell_width
-cell_height 2 mul neg
-translate
-
-/grid_clipper_for_hours {
-  newpath
-  0 -3.2 moveto
-  0 6.4 rlineto
-  -5 0 moveto
-  10 0 rlineto
-  1 setgray
-  stroke
-} def
-
-% grid_clipper_for_hours
-% 0 1 hours 1 sub{
-%   0 cell_height neg translate
-%   grid_clipper_for_hours
-% } for
-grestore
 
 cell_width 2 div
 cell_height 2.27 mul neg
