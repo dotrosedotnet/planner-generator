@@ -170,7 +170,7 @@ setdash
 /fontscale 8 def
 
 /Times-Bold findfont fontscale scalefont setfont
-cell_width 2 div cell_height 2.25 mul neg translate
+% cell_width 2 div cell_height 2.25 mul neg translate
 
 /center_text_in_cell_horizontally {
   /n 1 index def
@@ -180,7 +180,7 @@ cell_width 2 div cell_height 2.25 mul neg translate
   0 moveto
 } def
 
-0 cell_height 2 mul translate
+% 0 cell_height 2 mul translate
 
 /draw_cell-h {
   newpath
@@ -200,6 +200,7 @@ cell_width 2 div cell_height 2.25 mul neg translate
   stroke
 } def
 
+% TODO: this is where the alignment will go
 cell_width cell_height translate
 
 /draw_line-v {
