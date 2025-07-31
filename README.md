@@ -42,14 +42,14 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
               - [x] adjustable with dash offset
               - [x] dashes create crosses at intersections
       - [ ] hobonichi style lines (dot on cell intersection, four dashes between dots)
-      - [ ] hours
-        - [x] a numbering implementation
-          - [x] numbers in 12 and 24 hour formats
-          - [x] whiting out line behind numbers, based on number width
-        - [ ] implement label frequency (every $`n`$ hours)
-        - [ ] font changing
-        - [ ] more elegant padding around digits (whiting out lines? clipping?)
-          - [ ] more reliable digit height detection
-      - [ ] marks (I want bolder crosses at horizontal thirds, every three hours)
-        - [ ] implement marks
+  - [ ] hours
+    - [x] a numbering implementation
+      - [x] numbers in 12 and 24 hour formats
+      - [x] whiting out line behind numbers, based on number width
+    - [ ] implement label frequency (every $`n`$ hours)
+    - [ ] font changing
+    - [ ] more elegant padding around digits (whiting out lines? clipping?)
+      - [ ] more reliable digit height detection
+  - [ ] marks (I want bolder crosses at horizontal thirds, every three hours)
+    - [ ] implement marks
 - [ ] monthly calendar
