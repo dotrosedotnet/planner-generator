@@ -4,26 +4,35 @@ A tool for generating custom Hobonichi-style planners
 
 ## Description
 
-This project hopes to be a generator for custom planners. The dream is generation of a full year planner pdf which can then be sent to a printer. The pdf will include whatever sections the user wants, in whatever order they want, laid out how they want. There will be a web interface for the planner generator.
+This project hopes to be a generator for custom planners. The dream is generation of a full year planner pdf which can then be easily printed. The pdf will include whatever sections (daily, weekly, monthly, etc.) the user wants, in whatever order they want, laid out how they want. There will be a web interface for the planner generator.
 
-I'm starting with hand-coded postscript of a daily timeline. I suspect that I'll want to generate the postscript with python eventually. I look forward to exploring options for the web interface. Recommendations welcome.
+I'm starting with hand-coded postscript of a daily timeline. I suspect that I'll want to generate the postscript with another language eventually. I'm tempted to use `bash`. Most machines would be able to run this then.
 
-- [ ] timeline
-  - [ ] grid
-    - [ ] lines
-      - [ ] alternate line styles
-        - [ ] place $`n`$ lines maximally distant from each other, apply offset to move lines
-        - [ ] start with styles to choose from; allow more customization later
-      - [x] dashes create crosses at intersections
-      - [x] horizontal and vertical line generation
-      - [ ] line styles more predictably controlled
-    - [ ] hobonichi style lines (dot on cell intersection, four dashes between dots)
-    - [ ] hours
-      - [x] a numbering implementation
-        - [x] numbers in 12 and 24 hour formats
-        - [x] whiting out line behind numbers, based on number width
-      - [ ] implement label frequency (every $`n`$ hours)
-      - [ ] font changing
-      - [ ] more elegant padding around digits (whiting out lines? clipping?)
-    - [ ] marks (I want bolder crosses at horizontal thirds, every three hours)
-      - [ ] implement marks
+I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
+
+- [ ] remove residue from previous implementation
+
+- [ ] daily timeline
+  - [ ] dates
+    - [ ] this will probably have to be controlled externally, as I don't think postscript is handy with dates, and I don't want to make a bespoke date module lol
+  - [ ] timeline
+    - [ ] grid
+      - [ ] lines
+        - [ ] alternate line styles
+          - [ ] place $`n`$ lines maximally distant from each other, apply offset to move lines
+          - [ ] start with styles to choose from; allow more customization later
+        - [x] dashes create crosses at intersections
+        - [x] horizontal and vertical line generation
+        - [ ] line styles more predictably controlled
+      - [ ] hobonichi style lines (dot on cell intersection, four dashes between dots)
+      - [ ] hours
+        - [x] a numbering implementation
+          - [x] numbers in 12 and 24 hour formats
+          - [x] whiting out line behind numbers, based on number width
+        - [ ] implement label frequency (every $`n`$ hours)
+        - [ ] font changing
+        - [ ] more elegant padding around digits (whiting out lines? clipping?)
+          - [ ] more reliable digit height detection
+      - [ ] marks (I want bolder crosses at horizontal thirds, every three hours)
+        - [ ] implement marks
+- [ ] monthly calendar
