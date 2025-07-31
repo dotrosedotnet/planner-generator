@@ -6,7 +6,7 @@ A tool for generating custom Hobonichi-style planners
 
 This project hopes to be a generator for custom planners. The dream is generation of a full year planner pdf which can then be easily printed. The pdf will include whatever sections (daily, weekly, monthly, etc.) the user wants, in whatever order they want, laid out how they want. There will be a web interface for the planner generator.
 
-I'm starting with hand-coded postscript of a daily timeline. I suspect that I'll want to generate the postscript with another language eventually. I'm tempted to use `bash` so that most anybody could run this without needing more software.
+I'm starting with hand-coded PostScript of a daily timeline. I suspect that I'll want to generate the PostScript with another language eventually. I'm tempted to use `bash` so that most anybody could run this without needing more software.
 
 I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
 
@@ -14,7 +14,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
 
 - [ ] daily timeline
   - [ ] dates
-    - [ ] this will probably have to be controlled externally, as I don't think postscript is handy with dates, and I don't want to make a bespoke date module lol
+    - [ ] this will probably have to be controlled externally, as I don't think PostScript is handy with dates, and I don't want to make a bespoke date module lol
   - [ ] timeline
     - [ ] grid
       - [ ] grid generation
