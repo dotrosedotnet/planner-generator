@@ -17,6 +17,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
     - [ ] this will probably have to be controlled externally, as I don't think postscript is handy with dates, and I don't want to make a bespoke date module lol
   - [ ] timeline
     - [ ] grid
+    - [ ] iron out grid generation. too many rando `1 add` etc on rows and columns
       - [ ] lines
         - [ ] alternate line styles
           - [ ] place $`n`$ lines maximally distant from each other, apply offset to move lines
