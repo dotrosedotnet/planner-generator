@@ -20,6 +20,10 @@ I'm starting with hand-coded postscript of a daily timeline. I suspect that I'll
     - [ ] hobonichi style lines (dot on cell intersection, four dashes between dots)
     - [ ] hours
       - [x] a numbering implementation
+        - [x] numbers in 12 and 24 hour formats
+        - [x] whiting out line behind numbers, based on number width
       - [ ] implement label frequency (every $`n`$ hours)
+      - [ ] font changing
+      - [ ] more elegant padding around digits (whiting out lines? clipping?)
     - [ ] marks (I want bolder crosses at horizontal thirds, every three hours)
       - [ ] implement marks
