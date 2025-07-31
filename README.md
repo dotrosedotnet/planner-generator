@@ -33,11 +33,14 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
       - [ ] line generation
         - [ ] alternate line styles
           - [ ] start with styles to choose from; allow more customization later
-        - [x] dashes create crosses at intersections
         - [x] horizontal and vertical line generation
         - [ ] line styles more predictably controlled
         - [ ] cell generation
+          - [ ] more predictable control
           - [x] symmetric cell lines
+            - [x] ensure cell line ends start with dash, rather than space
+              - [x] adjustable with dash offset
+              - [x] dashes create crosses at intersections
       - [ ] hobonichi style lines (dot on cell intersection, four dashes between dots)
       - [ ] hours
         - [x] a numbering implementation
