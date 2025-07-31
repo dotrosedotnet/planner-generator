@@ -10,7 +10,7 @@ I'm starting with hand-coded postscript of a daily timeline. I suspect that I'll
 
 I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
 
-- [ ] _remove residue from previous implementation_
+- [ ] **remove residue from previous implementation**
 
 - [ ] daily timeline
   - [ ] dates
