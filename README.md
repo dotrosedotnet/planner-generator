@@ -36,7 +36,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
         - [x] horizontal and vertical line generation
         - [ ] line styles more predictably controlled
         - [ ] cell generation
-          - [ ] more predictable control
+          - [ ] more predictable line-style control
           - [x] symmetric cell lines
             - [x] ensure cell line ends start with dash, rather than space
               - [x] adjustable with dash offset
