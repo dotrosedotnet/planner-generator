@@ -24,9 +24,17 @@
 /cells_padding_timeline 1 ceiling def
 
 % cell dimensions
-/cell_height 4.7 mm def
-/cell_width 4.7 mm def
+/cell_height 5 mm def
+/cell_width 5 mm def
 
+/number_position {
+  cell_width 2 div
+  % cell_height fontscale add cells_padding_timeline add neg
+  % cells_padding_timeline 1 add cell_height mul fontscale 1 3 div mul add neg
+  % cells_padding_timeline cell_height mul neg
+  grid_height cells_padding_timeline cell_height 1.3 mul mul sub
+  translate
+} def
 % grid size
 /max_width_grid false def % if max_width is set to true, grid_left and _right are set to minimum
 /desired_row_length 15 def % length in cells
@@ -83,7 +91,7 @@ linewidth setlinewidth
   10 20 div
 ] 0 setdash
 
-/fontscale 8 def
+/fontscale cell_height def
 
 /Times-Bold findfont fontscale scalefont setfont
 
@@ -112,8 +120,6 @@ linewidth setlinewidth
   0 cell_height neg 2 div rlineto
   stroke
 } def
-
-% TODO: this is where the alignment will go
 
 % grid placement on page
 /align-v { % choose one
@@ -169,6 +175,7 @@ align-v /center eq
 } ifelse
 0 exch translate
 
+gsave
 /draw_line-v {
   draw_cell-v
   0 1 column_cell_count {
@@ -207,13 +214,10 @@ grestore
   0 cell_height translate
 } for
 clear
+grestore
 
 % position numbers
-cell_width 2 div
-cell_height 1.4 cells_padding_timeline add mul neg
-translate
-
-0 setgray
+number_position
 
 clear
 
@@ -234,8 +238,8 @@ gsave
     /width n stringwidth pop def
     gsave
       newpath
-      0 -3.5 moveto
-      0 6.4 rlineto
+      0 fontscale neg cell_height 2 div add moveto
+      0 fontscale rlineto
       width 2 div neg 0 moveto
       width 0 rlineto
       1 setgray
