@@ -17,15 +17,15 @@
   12
   % 24
 } def
-/hour_marking_frequency 3 def
-/squares_per_hour 1 def
+/hour_marking_frequency 1 def
+/rows_per_hour 1 floor abs def
 /first_hour 3 def
 /first_hour_marking 3 def
 /cells_padding_timeline 1 ceiling def
 
 % cell dimensions
-/cell_height 5 mm def
-/cell_width 5 mm def
+/cell_height 4 mm def
+/cell_width 4 mm def
 
 /number_position {
   cell_width 2 div
@@ -56,7 +56,7 @@
 /max_grid_height { page_height top_margin_width bottom_margin sub sub } def
 
 /calculated_grid_height {
-  squares_per_hour hours mul cell_height mul
+  rows_per_hour hours mul cell_height mul
 } def
 
 /column_cell_count {
@@ -70,7 +70,7 @@
   % lower hour count, alternating end and start time removal
   calculated_grid_height max_grid_height lt
   {
-    hours squares_per_hour mul cells_padding_timeline 2 mul 1 add add % why in the gosh am I adding one here
+    hours rows_per_hour mul cells_padding_timeline 2 mul 1 add add % why in the gosh am I adding one here
   }
   {
     max_grid_height cell_height div floor
@@ -91,7 +91,7 @@ linewidth setlinewidth
   10 20 div
 ] 0 setdash
 
-/fontscale cell_height def
+/fontscale cell_height 2 sub def
 
 /Times-Bold findfont fontscale scalefont setfont
 
@@ -224,7 +224,7 @@ clear
 % draw white circles behind numbers
 gsave
   cell_width 2 div
-  cell_height 3.5 div
+  cell_height 3.4 div
   translate
   [] 0 setdash
   2 setlinewidth
@@ -237,15 +237,15 @@ gsave
     /n n str cvs def
     /width n stringwidth pop def
     gsave
+      1 setgray
       newpath
       0 fontscale neg cell_height 2 div add moveto
-      0 fontscale rlineto
+      0 fontscale 0.83 mul rlineto % who the fuck knows lol
       width 2 div neg 0 moveto
       width 0 rlineto
-      1 setgray
       stroke
     grestore
-  0 cell_height neg hour_marking_frequency mul translate
+  0 cell_height rows_per_hour mul neg hour_marking_frequency mul translate
   } for
 grestore
 
@@ -263,7 +263,7 @@ first_hour hours add 1 sub {
   n center_text_in_cell_horizontally
   n show
   grestore
-  0 cell_height neg hour_marking_frequency mul translate
+  0 cell_height rows_per_hour mul neg hour_marking_frequency mul translate
 } for
 grestore
 
