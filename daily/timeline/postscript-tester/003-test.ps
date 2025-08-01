@@ -55,25 +55,14 @@
 /max_right_side_of_grid_x right_margin_width distance_from_right def
 /max_bottom_of_grid_y bottom_margin def
 
-% saves list of x placements of vertical lines
-left_side_of_grid_x cell_width max_right_side_of_grid_x {
-} for
-count
-array
-astore
-/lines_x exch def
-
 /row_cell_count desired_row_length 1 sub def
 
 /grid_width {
   row_cell_count cell_width mul
 } def
 
-/right_side_of_grid_x {
-  grid_width
-} def
-
 /max_grid_height { page_height top_margin_width bottom_margin sub sub } def
+
 /calculated_grid_height {
   squares_per_hour hours mul cell_height mul
 } def
@@ -93,15 +82,6 @@ astore
 /grid_height cell_height column_cell_count mul def
 /bottom_of_grid_y top_of_grid_y grid_height sub def
 
-clear
-% saves list of y placements of horizontal lines
-bottom_of_grid_y cell_height top_of_grid_y {
-} for
-count
-array
-astore
-/lines_y exch def
-
 % line features
 /linewidth 0.2 def
 /dots_per_cell 10 def
@@ -109,12 +89,6 @@ linewidth setlinewidth
 0 setlinejoin
 0 setlinecap
 /dot_height 0.01 def
-% [
-%   cell_height dots_per_cell div 2 div
-%   dup
-% ]
-% cell_height dots_per_cell div cell_height exch 4 div add
-% setdash
 [
   15 20 div
   10 20 div
@@ -132,8 +106,6 @@ linewidth setlinewidth
   n str cvs stringwidth pop 2 div sub
   0 moveto
 } def
-
-% 0 cell_height 2 mul translate
 
 /draw_cell-h {
   newpath
