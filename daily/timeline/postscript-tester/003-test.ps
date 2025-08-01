@@ -18,10 +18,10 @@
 /page_width 294 def % same as BoundingBox
 /page_height 419 def % same as BoundingBox
 
-% timeline hours, and hour markings
+% timeline nours, and hour markings
 /hours 24 def
 /hour_marking_frequency 3 def
-/cells_padding_timeline 2 def
+/cells_padding_timeline 1 def
 /squares_per_hour 1 def
 /first_hour 3 def
 /first_hour_marking 3 def
@@ -65,9 +65,8 @@ astore
 
 /row_cell_count desired_row_length 1 sub def
 
-% why must I add 1 here?
 /grid_width {
-  row_cell_count 1 add cell_width mul
+  row_cell_count cell_width mul
 } def
 
 /right_side_of_grid_x {
@@ -84,19 +83,19 @@ astore
   % set the column cell count to maximum cells that fit on page
   calculated_grid_height max_grid_height lt
   {
-    hours squares_per_hour mul cells_padding_timeline add
+    hours squares_per_hour mul cells_padding_timeline 2 mul 1 add add % why in the gosh am I adding one here
   }
   {
     max_grid_height cell_height div floor
   } ifelse
 } def
 
-/grid_height cell_height column_cell_count 1 add mul def
+/grid_height cell_height column_cell_count mul def
 /bottom_of_grid_y top_of_grid_y grid_height sub def
 
 clear
 % saves list of y placements of horizontal lines
-bottom_of_grid_y cell_height top_of_grid_y 1 add {
+bottom_of_grid_y cell_height top_of_grid_y {
 } for
 count
 array
@@ -110,17 +109,16 @@ linewidth setlinewidth
 0 setlinejoin
 0 setlinecap
 /dot_height 0.01 def
-[
-  cell_height dots_per_cell div 2 div
-  dup
-]
-cell_height dots_per_cell div cell_height exch 4 div add
-setdash
+% [
+%   cell_height dots_per_cell div 2 div
+%   dup
+% ]
+% cell_height dots_per_cell div cell_height exch 4 div add
+% setdash
 [
   15 20 div
   10 20 div
 ] 0 setdash
-% [dot_height cell_height dots_per_cell_height div ] 0 setdash % TODO does dot_height need to be compensated for?
 
 /fontscale 8 def
 
@@ -252,8 +250,9 @@ grestore
 } for
 clear
 
+% position numbers
 cell_width 2 div
-cell_height 2.27 mul neg
+cell_height 1.27 cells_padding_timeline add mul neg
 translate
 
 0 setgray
