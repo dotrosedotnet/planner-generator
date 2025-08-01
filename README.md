@@ -10,8 +10,6 @@ I'm starting with hand-coded PostScript of a daily timeline. I suspect that I'll
 
 I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
 
-- [ ] **remove residue from previous implementation**
-
 - [ ] daily timeline
   - [ ] dates
     - [ ] this will probably have to be controlled externally, as I don't think PostScript is handy with dates, and I don't want to make a bespoke date module lol
