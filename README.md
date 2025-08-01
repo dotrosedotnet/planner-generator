@@ -33,6 +33,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
             - [ ] fewer hours (if padding is entirely removed)
         - [ ] alternate line styles
           - [ ] place $`n`$ lines maximally distant from each other, apply offset to move lines
+        - [x] adjustable vertical padding
       - [ ] line generation
         - [ ] alternate line styles
           - [ ] start with styles to choose from; allow more customization later
