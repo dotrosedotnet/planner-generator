@@ -12,12 +12,12 @@
 /page_height 419 def % same as BoundingBox
 
 % timeline nours, and hour markings
-/hours 12 def
+/hours 24 def
 /hour_marking_frequency 3 def
 /squares_per_hour 1 def
-/first_hour 5 def
+/first_hour 3 def
 /first_hour_marking 3 def
-/cells_padding_timeline 1 def
+/cells_padding_timeline 1 ceiling def
 
 % cell dimensions
 /cell_height 3.7 mm def
@@ -229,7 +229,7 @@ gsave
   2 setlinewidth
   /str 2 string def
   first_hour 1 sub
-  1
+  hour_marking_frequency
   first_hour hours add 1 sub {
     /n 1 index def
     /n n clock_type mod 1 add def
@@ -244,14 +244,14 @@ gsave
       1 setgray
       stroke
     grestore
-  0 cell_height neg translate
+  0 cell_height neg hour_marking_frequency mul translate
   } for
 grestore
 
 % draw numbers
 gsave
 first_hour 1 sub
-1
+hour_marking_frequency
 first_hour hours add 1 sub {
   /n 1 index def
   /n n clock_type mod 1 add def
@@ -262,7 +262,7 @@ first_hour hours add 1 sub {
   n center_text_in_cell_horizontally
   n show
   grestore
-  0 cell_height neg translate
+  0 cell_height neg hour_marking_frequency mul translate
 } for
 grestore
 
