@@ -19,7 +19,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
         - [x] horizontal left/center/right
         - [x] vertical top/center/bottom
       - [ ] grid generation
-        - [ ] _iron out grid generation. too many rando `1 add` etc on rows and columns_
+        - [ ] **iron out grid generation. too many rando `1 add` etc on rows and columns**
         - [ ] handle grids which don't fit on page
           - [ ] margins too large
             - [ ] lower to lower limit
