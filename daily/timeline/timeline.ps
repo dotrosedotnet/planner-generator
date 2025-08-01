@@ -79,6 +79,44 @@
 
 /grid_height cell_height column_cell_count mul def
 
+/alignment_proc {
+% horizontal alignment
+align-h /center eq
+{
+  page_width row_cell_count 1 add cell_width mul sub 2 div
+}
+{
+  align-h /left eq
+  {
+    % make it left
+    left_margin
+  }
+  {
+    % make it right
+    page_width grid_width sub right_margin_width sub
+  } ifelse
+} ifelse
+0 translate
+
+% vertical alignment
+align-v /center eq
+{
+  % center here
+  page_height column_cell_count 1 add cell_height mul sub 2 div
+}
+{
+  align-v /top eq
+  {
+    % top here
+    top_margin_width distance_from_top grid_height sub
+  }
+  {
+    % bottom here
+    bottom_margin
+  } ifelse
+} ifelse
+0 exch translate
+} def
 % line features
 /linewidth 0.2 def
 /dots_per_cell 10 def
@@ -135,45 +173,7 @@ linewidth setlinewidth
   % /right
 } def
 
-
-
-% horizontal alignment
-% why must I add 1 here?
-align-h /center eq
-{
-  page_width row_cell_count 1 add cell_width mul sub 2 div
-}
-{
-  align-h /left eq
-  {
-    % make it left
-    left_margin
-  }
-  {
-    % make it right
-    page_width grid_width sub right_margin_width sub
-  } ifelse
-} ifelse
-0 translate
-
-% vertical alignment
-align-v /center eq
-{
-  % center here
-  page_height column_cell_count 1 add cell_height mul sub 2 div % WHY AM I ADDING 1 HERE lol
-}
-{
-  align-v /top eq
-  {
-    % top here
-    top_margin_width distance_from_top grid_height sub
-  }
-  {
-    % bottom here
-    bottom_margin
-  } ifelse
-} ifelse
-0 exch translate
+alignment_proc
 
 gsave
 /draw_line-v {
@@ -184,8 +184,8 @@ gsave
   } for
 } def
 
-gsave
 % draw vertical lines
+gsave
 0 1 row_cell_count 1 add {
   gsave
   draw_line-v
@@ -207,6 +207,7 @@ grestore
 0 cell_width neg translate
 
 % draw horizontal lines
+gsave
 0 1 column_cell_count 1 add {
   gsave
   draw_line-h
@@ -215,11 +216,10 @@ grestore
 } for
 clear
 grestore
+grestore
 
 % position numbers
 number_position
-
-clear
 
 % draw white circles behind numbers
 gsave
