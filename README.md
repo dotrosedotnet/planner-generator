@@ -52,6 +52,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
       - [ ] font changing
       - [ ] more elegant padding around digits (whiting out lines? clipping?)
         - [ ] more reliable digit height detection
+      - [ ] adjustable horizontal hour placement
     - [ ] marks (I want bolder crosses at horizontal thirds, every three hours)
       - [ ] implement marks
 - [ ] monthly calendar
