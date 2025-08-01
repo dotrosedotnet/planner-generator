@@ -7,24 +7,17 @@
 /points_to_mm {72 div 25.4 mul} def
 /points_to_cm {72 div 2.54 mul} def
 
-/concatstrings % (a) (b) _> (ab)  
-  { exch dup length    
-    2 index length add string    
-    dup dup 4 2 roll copy length
-    4 -1 roll putinterval
-  } bind def  
-
 % page dimensions
 /page_width 294 def % same as BoundingBox
 /page_height 419 def % same as BoundingBox
 
 % timeline nours, and hour markings
-/hours 24 def
+/hours 12 def
 /hour_marking_frequency 3 def
-/cells_padding_timeline 1 def
 /squares_per_hour 1 def
-/first_hour 3 def
+/first_hour 5 def
 /first_hour_marking 3 def
+/cells_padding_timeline 1 def
 
 % cell dimensions
 /cell_height 3.7 mm def
@@ -32,14 +25,7 @@
 
 % grid size
 /max_width_grid false def % if max_width is set to true, grid_left and _right are set to minimum
-/desired_row_length 20 def % length in cells
-
-% the control flow on the last one was absolute horseshit lol
-% this one, let's calculate everything before drawing, and draw based on calculations
-% OMG I'm running `watch` on `gs _dNODISPLAY _dBATCH 002_test.ps | tail +5` in a lower tmux pane, and I can `pstack` to that for debugging
-
-/desired_grid_width desired_row_length 1 sub cell_width mul def
-/desired_left_margin 6 def
+/desired_row_length 25 def % length in cells
 
 /distance_from_top {page_height exch sub} def
 /distance_from_right {page_width exch sub} def
@@ -49,13 +35,7 @@
 /left_margin 6 mm def
 /right_margin_width 6 mm def
 
-/left_side_of_grid_x 0 def
-/top_of_grid_y top_margin_width distance_from_top def
-
-/max_right_side_of_grid_x right_margin_width distance_from_right def
-/max_bottom_of_grid_y bottom_margin def
-
-/row_cell_count desired_row_length 1 sub def
+/row_cell_count desired_row_length 1 sub def % why minus 1 lol
 
 /grid_width {
   row_cell_count cell_width mul
@@ -70,6 +50,12 @@
 /column_cell_count {
   % if calculated grid height is taller than page_height,
   % set the column cell count to maximum cells that fit on page
+  % TODO:if calculated grid height is taller than page_height:
+  % lower cell height
+  % if cell_height is at minimum (TODO implement minimum cell height)
+  % lower padding cell quantity (TODO rename padding cell var)
+  % if padding cell quantity = 0
+  % lower hour count, alternating end and start time removal
   calculated_grid_height max_grid_height lt
   {
     hours squares_per_hour mul cells_padding_timeline 2 mul 1 add add % why in the gosh am I adding one here
@@ -80,7 +66,6 @@
 } def
 
 /grid_height cell_height column_cell_count mul def
-/bottom_of_grid_y top_of_grid_y grid_height sub def
 
 % line features
 /linewidth 0.2 def
@@ -97,7 +82,6 @@ linewidth setlinewidth
 /fontscale 8 def
 
 /Times-Bold findfont fontscale scalefont setfont
-% cell_width 2 div cell_height 2.25 mul neg translate
 
 /center_text_in_cell_horizontally {
   /n 1 index def
@@ -168,7 +152,7 @@ align-h /center eq
 align-v /center eq
 {
   % center here
-  page_height grid_height sub 2 div
+  page_height column_cell_count 1 add cell_height mul sub 2 div % WHY AM I ADDING 1 HERE lol
 }
 {
   align-v /top eq
@@ -231,6 +215,11 @@ translate
 
 clear
 
+/clock_type {
+  12
+  % 24
+} def
+
 % draw white circles behind numbers
 gsave
   cell_width 2 div
@@ -239,9 +228,11 @@ gsave
   [] 0 setdash
   2 setlinewidth
   /str 2 string def
-  2 1 26 {
+  first_hour 1 sub
+  1
+  first_hour hours add 1 sub {
     /n 1 index def
-    /n n 24 mod 1 add def
+    /n n clock_type mod 1 add def
     /n n str cvs def
     /width n stringwidth pop def
     gsave
@@ -259,9 +250,11 @@ grestore
 
 % draw numbers
 gsave
-2 1 26 {
+first_hour 1 sub
+1
+first_hour hours add 1 sub {
   /n 1 index def
-  /n n 24 mod 1 add def
+  /n n clock_type mod 1 add def
   /n n str cvs def
   /width n stringwidth pop def
   0 setgray
