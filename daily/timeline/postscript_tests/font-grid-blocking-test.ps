@@ -1,3 +1,50 @@
 %!PS
 
+/Helvetica-Narrow findfont 100 scalefont setfont
 
+20 300 moveto
+(!) show
+
+0.5 setlinewidth
+1 setlinecap
+
+/shape {
+gsave
+s -140 sub rotate
+1 1 rlineto
+stroke
+grestore
+} def
+
+/text {
+  gsave
+    (4) show
+  grestore
+} def
+
+/resolution_setting 4 def
+
+/shadow_resolution {
+  360 resolution_setting div
+} def
+
+pstack
+
+/shadow_size {
+  10
+} def
+
+0 shadow_resolution 360 {
+  /s 1 index def
+  newpath
+  200 200 shadow_size sqrt sqrt 1 sub
+  shadow_resolution neg s add
+  shadow_resolution s add
+  arc
+  text
+  % shape
+  % stroke
+  } for
+
+
+  showpage
