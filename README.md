@@ -22,7 +22,7 @@ I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
         - [ ] **iron out grid generation. too many rando `1 add` etc on rows and columns**
         - [ ] handle grids which don't fit on page
           - [ ] margins too large
-            - [ ] lower to lower limit
+            - [ ] lower margin size. stop at lower limit (`left/bottom/etc-margin-minimum`)
           - [ ] too many columns (if margin is at lower limit)
             - [ ] cap column count to fit
           - [ ] too many rows (if margin is at lower limit)
