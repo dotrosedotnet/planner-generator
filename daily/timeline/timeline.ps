@@ -128,7 +128,6 @@ linewidth setlinewidth
 
 /fontscale cell_height 2 sub def
 
-/Helvetica-Narrow findfont fontscale scalefont setfont
 
 /center_text_in_cell_horizontally {
   /n 1 index def
@@ -218,32 +217,57 @@ grestore
 % position numbers
 number_position
 
-% draw white circles behind numbers
+% % draw white circles behind numbers
+% gsave
+%   cell_width 2 div
+%   cell_height 4 div
+%   translate
+%   [] 0 setdash
+%   2 setlinewidth
+%   /str 2 string def
+%   first_hour 1 sub
+%   hour_marking_frequency
+%   first_hour hours add 1 sub {
+%     /n 1 index def
+%     /n n clock_type mod 1 add def
+%     /n n str cvs def
+%     /width n stringwidth pop def
+%     gsave
+%       1 setgray
+%       newpath
+%       0 fontscale neg cell_height 2 div add moveto
+%       0 fontscale 0.83 mul rlineto % who the fuck knows lol
+%       width 2 div neg 0 moveto
+%       width 0 rlineto
+%       stroke
+%     grestore
+%   0 cell_height rows_per_hour mul neg hour_marking_frequency mul translate
+%   } for
+% grestore
+
+
+/str 2 string def
+/Helvetica-Narrow findfont fontscale scalefont setfont
+
+% draw numbers
 gsave
-  cell_width 2 div
-  cell_height 4 div
-  translate
+first_hour 1 sub
+hour_marking_frequency
+first_hour hours add 1 sub {
+  /n 1 index def
+  /n n clock_type mod 1 add def
+  /n n str cvs def
+  /width n stringwidth pop def
+  1 setgray
+  gsave
+  n center_text_in_cell_horizontally
+  fontscale 6 div setlinewidth
   [] 0 setdash
-  2 setlinewidth
-  /str 2 string def
-  first_hour 1 sub
-  hour_marking_frequency
-  first_hour hours add 1 sub {
-    /n 1 index def
-    /n n clock_type mod 1 add def
-    /n n str cvs def
-    /width n stringwidth pop def
-    gsave
-      1 setgray
-      newpath
-      0 fontscale neg cell_height 2 div add moveto
-      0 fontscale 0.83 mul rlineto % who the fuck knows lol
-      width 2 div neg 0 moveto
-      width 0 rlineto
-      stroke
-    grestore
+  n true charpath
+  stroke
+  grestore
   0 cell_height rows_per_hour mul neg hour_marking_frequency mul translate
-  } for
+} for
 grestore
 
 % draw numbers
