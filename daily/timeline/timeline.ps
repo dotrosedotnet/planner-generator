@@ -21,20 +21,22 @@
 /rows_per_hour 1 floor abs def
 /first_hour 3 def
 /first_hour_marking 3 def
-/cells_padding_timeline 1 ceiling def
+/cells_padding_timeline 2 ceiling def
 
 % cell dimensions
-/cell_height 4 mm def
-/cell_width 4 mm def
+/cell_height 3.7 mm def
+/cell_width 3.7 mm def
 
 /number_position {
   cell_width 2 div
   grid_height cells_padding_timeline cell_height mul fontscale 1 3 div mul add sub
   translate
 } def
+
 % grid size
 /max_width_grid false def % if max_width is set to true, grid_left and _right are set to minimum
-/desired_row_length 15 def % length in cells
+
+/desired_row_length 25 def % length in cells
 
 /distance_from_top {page_height exch sub} def
 /distance_from_right {page_width exch sub} def
