@@ -249,7 +249,7 @@ number_position
 /str 2 string def
 /Helvetica-Narrow findfont fontscale scalefont setfont
 
-% draw numbers
+% draw grid-blocking numbers (white)
 gsave
 first_hour 1 sub
 hour_marking_frequency
@@ -267,6 +267,32 @@ first_hour hours add 1 sub {
   stroke
   grestore
   0 cell_height rows_per_hour mul neg hour_marking_frequency mul translate
+} for
+grestore
+
+
+% draw grid-blocking ellipses
+1 setgray
+gsave
+  first_hour 1 sub
+  hour_marking_frequency
+  first_hour hours add 1 sub {
+  gsave
+    0.5 0.25 scale
+    newpath
+    cell_width
+    fontscale fontscale 1 3 div mul add
+    fontscale 2 div
+    0 360 arc closepath
+    fill
+  grestore
+  gsave
+    0.25 0.75 scale
+    newpath
+    cell_width 2 mul fontscale 2.1 div fontscale 2 div 0 360 arc closepath
+    fill
+  grestore
+0 cell_height rows_per_hour mul neg hour_marking_frequency mul translate
 } for
 grestore
 
