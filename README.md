@@ -1,6 +1,6 @@
 # Planner Maker
 
-A tool for generating custom Hobonichi-style planners
+A tool for generating custom planners in various styles
 
 ## Description
 
