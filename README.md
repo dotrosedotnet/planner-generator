@@ -6,9 +6,9 @@ A tool for generating custom planners in various styles
 
 This project hopes to be a generator for custom planners. The dream is generation of a full year planner pdf which can then be easily printed. The pdf will include whatever sections (daily, weekly, monthly, etc.) the user wants, in whatever order they want, laid out how they want. There will be a web interface for the planner generator.
 
-I'm starting with hand-coded PostScript of a daily timeline. I suspect that I'll want to generate the PostScript with another language eventually. I'm tempted to use `bash` so that most anybody could run this without needing to install anything.
+I'm starting with hand-coded PostScript of a daily timeline. I'm starting to build a set of `bash` scripts to include the settings from the settings files, and implement page layout and book layout.
 
-I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
+To see an example you can open a `.ps` file with most pdf viewers. And then you can replace setting vars. At least until the bash scripts get implemented.
 
 - [ ] daily timeline
   - [ ] dates
