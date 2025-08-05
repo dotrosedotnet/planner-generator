@@ -43,12 +43,13 @@ sigint_proc() {
   cleanup
 }
 
-# TODO: match ps files with settings files in a function which can be reused for
-# all page sections
+LAST_MOD_TIME=$(stat -c $Y .)
 
-ps_file=$(ls | grep .ps)
-settings_file="${ps_file%.*}_settings.md"
-echo $settings_file
+PS_FILE=$(ls | grep .ps)
+SETTINGS_FILE="${ps_file%.*}_settings.md"
+
+# TODO: copy ps file to tmp folder and replace settings with
+# the settings in settings.md file
 
 # delete tmp on script complete
 # trap sigint_proc SIGINT
@@ -56,4 +57,4 @@ echo $settings_file
 # mkdir tmp
 # cp timeline.ps tmp/
 #
-# cleanup
+cleanup
