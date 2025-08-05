@@ -38,7 +38,8 @@ cleanup() {
   exit 1
 }
 
-#TODO: match ps files with settings files in a reusable function
+# TODO: match ps files with settings files in a function which can be reused for
+# all page sections
 
 # delete tmp on script complete
 trap cleanup SIGINT
