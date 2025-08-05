@@ -43,18 +43,38 @@ sigint_proc() {
   cleanup
 }
 
-LAST_MOD_TIME=$(stat -c $Y .)
+# delete tmp on script complete
+trap sigint_proc SIGINT
 
-PS_FILE=$(ls | grep .ps)
-SETTINGS_FILE="${ps_file%.*}_settings.md"
+files_to_watch() {
+  local PS_FILE=$(ls | grep .ps)
+  local SETTINGS_FILE="${ps_file%.*}_settings.md"
+}
+
+when_files_change() {
+  ls -1tr | tail -1 | awk '{print $1" changed!"}'
+}
 
 # TODO: copy ps file to tmp folder and replace settings with
 # the settings in settings.md file
-
-# delete tmp on script complete
-# trap sigint_proc SIGINT
 #
+# test file watching first by just echoing something if either file changes
+
+watch_files() {
+  local LAST_MOD_TIME=$(stat -c %Y .)
+  while true; do
+    local CURRENT_MOD_TIME=$(stat -c %Y .)
+    if [[ "$CURRENT_MOD_TIME" != "$LAST_MOD_TIME" ]]; then
+      when_files_change
+      LAST_MOD_TIME="$CURRENT_MOD_TIME"
+    fi
+    sleep 1
+  done
+}
+
+watch_files
+
 # mkdir tmp
 # cp timeline.ps tmp/
-#
+
 cleanup
