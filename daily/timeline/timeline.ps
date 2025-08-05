@@ -1,6 +1,10 @@
 %!PS
 %%BoundingBox: 0 0 294 419 %slightly under A6
 
+%%%%%%%%%%%%%%%%%%%%%%
+%% DEFAULT SETTINGS %%
+%%%%%%%%%%%%%%%%%%%%%%
+
 % creates mm unit
 /mm {72 mul 25.4 div} def
 /cm {72 mul 2.54 div} def
@@ -27,11 +31,7 @@
 /cell_height 4 mm def
 /cell_width 4 mm def
 
-/number_position {
-  cell_width 2 div
-  grid_height cells_padding_timeline cell_height mul fontscale 1 3 div mul add sub
-  translate
-} def
+/fontscale cell_height 2 sub def
 
 % grid size
 /max_width_grid false def % if max_width is set to true, grid_left and _right are set to minimum
@@ -47,6 +47,11 @@
 /right_margin_width 6 mm def
 
 /row_cell_count desired_row_length 1 sub def % why minus 1 lol
+
+%%%%%%%%%%%%%%%%%%%
+% END OF SETTINGS %
+%%%%%%%%%%%%%%%%%%%
+
 
 /grid_width {
   row_cell_count cell_width mul
@@ -77,6 +82,12 @@
 } def
 
 /grid_height cell_height column_cell_count mul def
+
+/number_position {
+  cell_width 2 div
+  grid_height cells_padding_timeline cell_height mul fontscale 1 3 div mul add sub
+  translate
+} def
 
 /alignment_proc {
 % horizontal alignment
@@ -128,7 +139,6 @@ linewidth setlinewidth
   10 20 div
 ] 0 setdash
 
-/fontscale cell_height 2 sub def
 
 
 /center_text_in_cell_horizontally {
