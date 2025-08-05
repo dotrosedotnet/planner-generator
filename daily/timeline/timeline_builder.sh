@@ -10,4 +10,12 @@
 # update timeline.tmp.ps
 # delete tmp folder on quit
 
-grep -niIr "^#\ " timeline_settings.md
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+CURRENT_DIR=$(pwd)
+
+if [ "$SCRIPT_DIR" != "$CURRENT_DIR" ]; then
+  echo "Error: This script must be run from it's location: $SCRIPT_DIR"
+  exit 1
+fi
+
+mkdir tmp
