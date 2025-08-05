@@ -9,14 +9,6 @@
 # unofficial bash strict mode
 set -euo pipefail IFS=$'\n\t'
 
-# GAMEPLAN
-# - [x] make tmp folder
-# - [ ] generate timeline.tmp.ps from timeline.ps and timeline_settings.md
-#   - [ ] use default values if there are no matches
-# - [ ] watch timeline.ps and timeline_settings.md for changes
-# - [ ] update timeline.tmp.ps
-# - [ ] delete tmp folder on quit
-
 # keep the script from running outside of it's directory
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 CURRENT_DIR=$(pwd)
@@ -30,5 +22,29 @@ fi
 # let's do this #
 ##=============##
 
+# GAMEPLAN
+# - [x] make tmp folder
+# - [ ] generate timeline.tmp.ps from timeline.ps and timeline_settings.md
+#   - [ ] use default values if there are no matches
+# - [ ] watch timeline.ps and timeline_settings.md for changes
+# - [ ] update timeline.tmp.ps
+# - [x] delete tmp on script complete
+# - [x] delete tmp folder on Ctrl+C
+
+cleanup() {
+  echo "Ctrl+C detected. Cleaning up..."
+  rm -rvf tmp
+  echo "Cleanup complete."
+  exit 1
+}
+
+#TODO: match ps files with settings files in a reusable function
+
+# delete tmp on script complete
+trap cleanup SIGINT
+
+
 mkdir tmp
 cp timeline.ps tmp/
+
+cleanup
