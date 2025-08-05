@@ -32,20 +32,28 @@ fi
 # - [x] delete tmp folder on Ctrl+C
 
 cleanup() {
-  echo "Ctrl+C detected. Cleaning up..."
+  echo "Cleaning up..."
   rm -rvf tmp
   echo "Cleanup complete."
   exit 1
 }
 
+sigint_proc() {
+  echo $'\n'$'\n'"Ctrl+C detected."$'\n'
+  cleanup
+}
+
 # TODO: match ps files with settings files in a function which can be reused for
 # all page sections
 
+ps_file=$(ls | grep .ps)
+settings_file="${ps_file%.*}_settings.md"
+echo $settings_file
+
 # delete tmp on script complete
-trap cleanup SIGINT
-
-
-mkdir tmp
-cp timeline.ps tmp/
-
-cleanup
+# trap sigint_proc SIGINT
+#
+# mkdir tmp
+# cp timeline.ps tmp/
+#
+# cleanup
