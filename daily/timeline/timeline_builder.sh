@@ -46,10 +46,8 @@ sigint_proc() {
 # delete tmp on script complete
 trap sigint_proc SIGINT
 
-files_to_watch() {
-  local PS_FILE=$(ls | grep .ps)
-  local SETTINGS_FILE="${ps_file%.*}_settings.md"
-}
+# FILES to watch
+# SETTINGS_FILE="${ps_file%.*}_settings.md"
 
 when_files_change() {
   ls -1tr | tail -1 | awk '{print $1" changed!"}'
@@ -71,6 +69,14 @@ watch_files() {
     sleep 1
   done
 }
+
+mk_tmp_cp_ps() {
+  mkdir tmp
+  local PS_FILE=$(ls | grep .ps)
+  cp $PS_FILE tmp/
+}
+
+mk_tmp_cp_ps
 
 watch_files
 
