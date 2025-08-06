@@ -30,24 +30,50 @@ fi
 # - [x] delete tmp on script complete
 # - [x] delete tmp folder on Ctrl+C
 
+readonly THIS_SCRIPT=$(readlink -f "$0")
+readonly SCRIPT_NAME=$(basename $0)
+
 cleanup() {
   echo "Cleaning up..."
   rm -rvf tmp
   echo "Cleanup complete."
-  exit 1
 }
 
 sigint_proc() {
   echo $'\n'$'\n'"Ctrl+C detected."$'\n'
   cleanup
+  exit 1
 }
 
-# delete tmp on script complete
+restart_script() {
+  cleanup
+  sleep 2
+  exec "$THIS_SCRIPT"
+}
+
+cleanup_and_exit() {
+  cleanup
+  exit 1
+}
+
+# delete tmp on ctrl+c
 trap sigint_proc SIGINT
+
+# delete tmp on normal exits
 trap cleanup EXIT
 
 print_changed_file() {
   ls -1tr | tail -1 | awk '{print $1" changed!"}'
+}
+
+restart_on_script_edit() {
+  local EDITED_FILE=$(ls -1tr | tail -1)
+  if [[ "$EDITED_FILE" == "$SCRIPT_NAME" ]]; then
+    cleanup
+    echo $'\n'"script file edited. restarting script."$'\n'
+    sleep 2
+    exec "$THIS_SCRIPT"
+  fi
 }
 
 # TODO: copy ps file to tmp folder and replace settings with
@@ -59,12 +85,17 @@ update_ps() {
   # get array of settings declared in settings file
   local PS_FILE=$(ls | grep .ps)
   local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
-  local SETTINGS_NAMES=$(grep "^# " $SETTINGS_FILE)
+  local SETTINGS_NAME_LINES=$(grep "^# " $SETTINGS_FILE)
   while IFS= read -r line; do
-    # echo "$line"
-    # awk "/$line/{found=1; next} found && /^\W/{print; exit}" "$SETTINGS_FILE"
-    # echo "ass"
-  done <<< "$SETTINGS_NAMES"
+    #
+    # find the line in the file, and find the next instance of line beginning
+    # with alphanumeric chars, as that will be the corresponding setting 
+    #
+    local SETTING_NAME=$(echo "$line" | awk '{print $2}')
+    # echo "$SETTING_NAME"\:
+    # awk '/'"$line"'/{found=1; next} found && /^\w/{print; exit}' "$SETTINGS_FILE"
+  done <<< "$SETTINGS_NAME_LINES"
+  echo "=========="$'\n'
 }
 
 watch_files() {
@@ -72,7 +103,9 @@ watch_files() {
   while true; do
     local CURRENT_MOD_TIME=$(stat -c %Y .)
     if [[ "$CURRENT_MOD_TIME" != "$LAST_MOD_TIME" ]]; then
+      sleep 0.25
       print_changed_file
+      restart_on_script_edit
       update_ps
       LAST_MOD_TIME="$CURRENT_MOD_TIME"
     fi
@@ -86,8 +119,13 @@ mk_tmp_cp_ps() {
   cp $PS_FILE tmp/
 }
 
-mk_tmp_cp_ps
+main() {
+  echo "script started"$'\n'
+  mk_tmp_cp_ps
 
-watch_files
+  watch_files
 
-cleanup
+  cleanup
+}
+
+main
