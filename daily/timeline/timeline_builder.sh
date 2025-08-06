@@ -60,7 +60,7 @@ cleanup_and_exit() {
 trap sigint_proc SIGINT
 
 # delete tmp on normal exits
-trap cleanup EXIT
+trap restart_script EXIT
 
 print_changed_file() {
   ls -1tr | tail -1 | awk '{print $1" changed!"}'
