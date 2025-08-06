@@ -23,10 +23,13 @@ fi
 
 # GAMEPLAN
 # - [x] make tmp folder
+# - [x] watch timeline.ps and timeline_settings.md for changes
 # - [ ] generate timeline.tmp.ps from timeline.ps and timeline_settings.md
 #   - [ ] use default values if there are no matches
-# - [ ] watch timeline.ps and timeline_settings.md for changes
-# - [ ] update timeline.tmp.ps
+# - [ ] update timeline.tmp.ps when:
+#   - [x] shell script is changed
+#   - [x] ps file is changed
+#   - [ ] settings file is changed
 # - [x] delete tmp on script complete
 # - [x] delete tmp folder on Ctrl+C
 
