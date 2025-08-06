@@ -10,9 +10,8 @@
 set -euo pipefail IFS=$'\n\t'
 
 # keep the script from running outside of it's directory
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
-CURRENT_DIR=$(pwd)
-
+readonly SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+readonly CURRENT_DIR=$(pwd)
 if [ "$SCRIPT_DIR" != "$CURRENT_DIR" ]; then
   echo "Error: This script must be run from it's location: $SCRIPT_DIR"
   exit 1
@@ -45,11 +44,9 @@ sigint_proc() {
 
 # delete tmp on script complete
 trap sigint_proc SIGINT
+trap cleanup EXIT
 
-# FILES to watch
-# SETTINGS_FILE="${ps_file%.*}_settings.md"
-
-when_files_change() {
+print_changed_file() {
   ls -1tr | tail -1 | awk '{print $1" changed!"}'
 }
 
@@ -58,12 +55,25 @@ when_files_change() {
 #
 # test file watching first by just echoing something if either file changes
 
+update_ps() {
+  # get array of settings declared in settings file
+  local PS_FILE=$(ls | grep .ps)
+  local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
+  local SETTINGS_NAMES=$(grep "^# " $SETTINGS_FILE)
+  while IFS= read -r line; do
+    # echo "$line"
+    # awk "/$line/{found=1; next} found && /^\W/{print; exit}" "$SETTINGS_FILE"
+    # echo "ass"
+  done <<< "$SETTINGS_NAMES"
+}
+
 watch_files() {
   local LAST_MOD_TIME=$(stat -c %Y .)
   while true; do
     local CURRENT_MOD_TIME=$(stat -c %Y .)
     if [[ "$CURRENT_MOD_TIME" != "$LAST_MOD_TIME" ]]; then
-      when_files_change
+      print_changed_file
+      update_ps
       LAST_MOD_TIME="$CURRENT_MOD_TIME"
     fi
     sleep 1
@@ -79,8 +89,5 @@ mk_tmp_cp_ps() {
 mk_tmp_cp_ps
 
 watch_files
-
-# mkdir tmp
-# cp timeline.ps tmp/
 
 cleanup
