@@ -13,7 +13,7 @@ set -euo pipefail IFS=$'\n\t'
 readonly SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 readonly CURRENT_DIR=$(pwd)
 if [ "$SCRIPT_DIR" != "$CURRENT_DIR" ]; then
-  echo "Error: This script must be run from it's location: $SCRIPT_DIR"
+  echo "Error: This script must be run from it's location: ""$SCRIPT_DIR"
   exit 1
 fi
 
@@ -31,7 +31,7 @@ fi
 # - [x] delete tmp folder on Ctrl+C
 
 readonly THIS_SCRIPT=$(readlink -f "$0")
-readonly SCRIPT_NAME=$(basename $0)
+readonly SCRIPT_NAME=$(basename "$0")
 
 cleanup() {
   echo "Cleaning up..."
@@ -91,7 +91,7 @@ update_tmp_ps_settings() {
   # 
   local PS_FILE=$(ls | grep .ps)
   local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
-  local SETTINGS_NAME_LINES=$(grep "^# " $SETTINGS_FILE)
+  local SETTINGS_NAME_LINES=$(grep "^# " "$SETTINGS_FILE")
   # if settings was most recently edited file:
   #  echo "settings updated, recopying to tmp file "
   while IFS= read -r line; do
