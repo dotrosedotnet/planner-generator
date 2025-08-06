@@ -8,7 +8,7 @@ This project hopes to be a generator for custom planners. The dream is generatio
 
 ## implementation
 
-I'm starting with hand-coded PostScript of a daily timeline. I'm having a blast building a `bash` script to implement settings from the `settings.md` files. I'm intending to do this whole project in bash and PostScript to maximize portability.
+I started with hand-coded PostScript of a daily timeline. I'm having a blast building the first `bash` script to implement settings from the `settings.md` files. I'm intending to do this whole project in bash and PostScript to maximize portability. You can see the `bash` script progress in the `implement-timeline-builder-shell-script` branch.
 
 ## usage
 
