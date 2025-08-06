@@ -62,8 +62,19 @@ trap sigint_proc SIGINT
 # delete tmp on normal exits
 trap restart_script EXIT
 
+mk_tmp_cp_ps() {
+  mkdir tmp
+  local PS_FILE=$(ls | grep .ps)
+  cp "$PS_FILE" tmp/
+}
+
+start_zathura_on_tmp_ps() {
+  local PS_FILE=$(ls | grep .ps)
+  zathura tmp/"$PS_FILE" &!
+}
+
 print_changed_file() {
-  ls -1tr | tail -1 | awk '{print $1" changed!"}'
+  ls -1tr | tail -1 | awk '{print $1" changed!\n"}'
 }
 
 restart_on_script_edit() {
@@ -76,16 +87,13 @@ restart_on_script_edit() {
   fi
 }
 
-# TODO: copy ps file to tmp folder and replace settings with
-# the settings in settings.md file
-#
-# test file watching first by just echoing something if either file changes
-
-update_ps() {
-  # get array of settings declared in settings file
+update_tmp_ps_settings() {
+  # 
   local PS_FILE=$(ls | grep .ps)
   local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
   local SETTINGS_NAME_LINES=$(grep "^# " $SETTINGS_FILE)
+  # if settings was most recently edited file:
+  #  echo "settings updated, recopying to tmp file "
   while IFS= read -r line; do
     #
     # find the line in the file, and find the next instance of line beginning
@@ -98,6 +106,17 @@ update_ps() {
   echo "=========="$'\n'
 }
 
+recopy_ps_on_ps_edit() {
+  local PS_FILE=$(ls | grep .ps)
+  local EDITED_FILE=$(ls -1tr | tail -1)
+  if [[ "$EDITED_FILE" == "$PS_FILE" ]]; then
+    cleanup
+    echo $'\n'"PS source edited. recopying to tmp"$'\n'
+    # update_tmp_ps_settings
+    mk_tmp_cp_ps
+  fi
+}
+
 watch_files() {
   local LAST_MOD_TIME=$(stat -c %Y .)
   while true; do
@@ -106,25 +125,18 @@ watch_files() {
       sleep 0.25
       print_changed_file
       restart_on_script_edit
-      update_ps
+      recopy_ps_on_ps_edit
+      # update_tmp_ps_settings
       LAST_MOD_TIME="$CURRENT_MOD_TIME"
     fi
     sleep 1
   done
 }
 
-mk_tmp_cp_ps() {
-  mkdir tmp
-  local PS_FILE=$(ls | grep .ps)
-  cp $PS_FILE tmp/
-}
-
 main() {
   echo "script started"$'\n'
   mk_tmp_cp_ps
-
   watch_files
-
   cleanup
 }
 
