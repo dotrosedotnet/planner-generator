@@ -32,7 +32,7 @@ below.
 
 here's an example of a timeline grid that the program can generate from user settings
 
-![timeline output from the planner generator program](timeline.jpg)
+![timeline output from the planner generator program](daily/timeline/timeline.jpg)
 
 ### date
 
