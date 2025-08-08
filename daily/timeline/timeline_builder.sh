@@ -7,6 +7,7 @@
 ################################################################################
 
 # unofficial bash strict mode
+# TODO: reconsider regarding http://mywiki.wooledge.org/BashPitfalls#set_-euo_pipefail
 set -euo pipefail IFS=$'\n\t'
 
 # keep the script from running outside of it's directory
@@ -35,6 +36,8 @@ fi
 
 readonly THIS_SCRIPT=$(readlink -f "$0")
 readonly SCRIPT_NAME=$(basename "$0")
+# there are 4 instances of `local PS_FILE` (2025-08-07)
+# maybe it should be a global var
 
 cleanup() {
   echo "Cleaning up..."
@@ -72,6 +75,7 @@ mk_tmp_cp_ps() {
 }
 
 start_zathura_on_tmp_ps() {
+  # not running this until I track the PID and don't restart if still running
   local PS_FILE=$(ls | grep .ps)
   zathura tmp/"$PS_FILE" &!
 }
@@ -91,7 +95,6 @@ restart_on_script_edit() {
 }
 
 update_tmp_ps_settings() {
-  # 
   local PS_FILE=$(ls | grep .ps)
   local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
   local SETTINGS_NAME_LINES=$(grep "^# " "$SETTINGS_FILE")
