@@ -10,6 +10,38 @@ I'm starting with hand-coded PostScript of a daily timeline. I suspect that I'll
 
 I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
 
+## daily pages
+
+the first two modules I will build will be the timeline and date modules, as
+these are the ones I'm most excited about.
+
+After I build both modules, I will move on to a "page orchestrator" script
+which will combine the timeline and date module onto one page, according to the
+settings set by the user.
+
+### timeline
+
+my ideal timeline will have 24 hours from 3am to 3am on a 12 hour clock,
+probably with about 3.7mm-squared cells. I would like it to be landscape, so I
+might have to lower the cell height. and I'd like periodically highlighted
+intersections, so I can easily line up the cells with their corresponding time
+at a glance.
+
+I've implemented a lot of that so far. you can see what my priorities are
+below.
+
+here's an example of a timeline grid that the program can generate from user settings
+
+![timeline output from the planner generator program](timeline.jpg)
+
+### date
+
+I would like my daily pages to have automatically calculated dates, so that
+will be the next module I build. I'm excited to see how I can get bash (the
+`date` command) and PostScript working together to make that happen.
+
+# TODO
+
 - [ ] daily timeline
   - [ ] dates
     - [ ] this will probably have to be controlled externally, as I don't think PostScript is handy with dates, and I don't want to make a bespoke date module lol
