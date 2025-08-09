@@ -16,6 +16,14 @@ To see an example you can open a `.ps` file with most pdf viewers. And then you 
 
 ## a todo
 
+- [ ] config
+  - [ ] finalize config file implementation
+    - [ ] easy and predictable to config and run locally
+      - [ ] parser is reliable
+      - [ ] config file is easy to read
+      - [ ] config file is easy to modify
+      - [ ] (bonus) config file is easy to read and modify by laypeople (is this silly?)
+    - [ ] easy and predictable to config and run from web interface
 - [ ] daily timeline
   - [ ] dates
     - [ ] this will probably have to be controlled externally, as I don't think PostScript is handy with dates, and I don't want to make a bespoke date module lol
