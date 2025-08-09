@@ -51,7 +51,7 @@ sigint_proc() {
   exit 1
 }
 
-restart_script() {
+restart() {
   cleanup
   sleep 2
   exec "$THIS_SCRIPT"
@@ -66,7 +66,7 @@ cleanup_and_exit() {
 trap sigint_proc SIGINT
 
 # delete tmp on normal exits
-trap restart_script EXIT
+trap restart EXIT
 
 mk_tmp_cp_ps() {
   mkdir tmp
