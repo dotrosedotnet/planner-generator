@@ -1,123 +1,156 @@
 #!/usr/bin/env bash
 
-############################################################
-#
-# PAGE SIZE
-# (string)
-# a4-8
-# b4-8
-# custom
-# 
-############################################################
+###############################
+#                             #
+#         PAGE SIZE           #
+#         (string)            #
+# options: a4-8, b4-8, custom #
+#                             #
+###############################
 
 PAGE_SIZE="a6"
 
-# page orientation
-## (string)
-## options: portrait, landscape
+################################
+#                              #
+#     page orientation         #
+#        (string)              #
+# options: portrait, landscape #
+#                              #
+################################
 
 PAGE_ORIENTATION="landscape"
 
-# page_width
-
-## (number: point)
+################################
+#                              #
+#         page_width           #
+#         (integer)            #
+#   units: points (1/72 inch)  #
+#                              #
+################################
 
 PAGE_WIDTH=294
 
-# page_height
-## (number: point)
+################################
+#                              #
+#         page_height          #
+#          (integer)           #
+#   units: points (1/72 inch)  #
+#                              #
+################################
 
 PAGE_HEIGHT=419
 
-# hours
-
-## (int)
-
-## 1-? however many fit
+################################
+#                              #
+#            hours             #
+#          (integer)           #
+#            >= 1              #
+#                              #
+################################
 
 HOURS=24
 
-# clock_type
-
-## (int)
-
-## 12
-
-## 24
+################################
+#                              #
+#         clock type           #
+#         (integer)            #
+#          12 or 24            #
+#                              #
+################################
 
 CLOCK_TYPE=12
 
-# hour_marking_frequency
-
-## (int)
-
-## 1-?
+################################
+#                              #
+#   hour marking frequency     #
+#         (integer)            #
+#           >= 1               #
+#                              #
+################################
 
 HOUR_MARKING_FREQUENCY=3
 
-# rows_per_hour
-
-## (int)
-
-## 1+ (probably one or two)
+################################
+#                              #
+#        rows per hour         #
+#         (integer)            #
+#           >= 1               #
+#                              #
+################################
 
 ROWS_PER_HOUR=1
 
-# first_hour
-
-## (int)
-
-## > 0
-
-## =< clock_type
+################################
+#                              #
+#         first hour           #
+#         (integer)            #
+#           > 0                #
+#       =< clock type          #
+#                              #
+################################
 
 FIRST_HOUR=3
 
-# first_hour_marking
-
-## (int)
-
-## > 0
-
-## =< clock_type
+################################
+#                              #
+#     first hour marking       #
+#         (integer)            #
+#           > 0                #
+#       =< clock type          #
+#                              #
+################################
 
 FIRST_HOUR_MARKING=3
 
-# cells_padding_timeline
-
-## (int)
-
-## >= 0
+################################
+#                              #
+#      vertical padding        #
+#     for timeline hours       #
+#         (integer)            #
+#           >= 0               #
+#                              #
+################################
 
 CELLS_PADDING_TIMELINE=2
 
-# cell_height
+################################
+#                              #
+#         cell height          #
+#      (string of number)      #
+#           > 0                #
+#         millimeters          #
+#                              #
+################################
 
-## (number: mm)
+CELL_HEIGHT="3.7"
 
-## > 0
+################################
+#                              #
+#         cell width           #
+#      (string of number)      #
+#            > 0               #
+#         millimeters          #
+#                              #
+################################
 
-CELL_HEIGHT=4
+CELL_WIDTH="3.7"
 
-# cell_width
-
-## (number: mm)
-
-## > 0
-
-CELL_WIDTH=4
-
-# max_width_grid
-
-## (bool)
+################################
+#                              #
+#       full width grid        #
+#           boolean            #
+#                              #
+################################
 
 MAX_WIDTH_GRID=false
 
-# desired_row_length
-
-## (int)
-
-## > 0
+################################
+#                              #
+#     desired row length       #
+#          (integer)           #
+#            > 0               #
+#                              #
+################################
 
 DESIRED_ROW_LENGTH=15
 
