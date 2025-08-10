@@ -2,13 +2,13 @@
 
 A tool for generating custom planners in various styles
 
-## Description
+## hopes and dreams
 
 This project hopes to be a generator for custom planners. The dream is generation of a full year planner pdf which can then be easily printed. The pdf will include whatever sections (daily, weekly, monthly, etc.) the user wants, in whatever order they want, laid out how they want. There will be a web interface for the planner generator.
 
-I'm starting with hand-coded PostScript of a daily timeline. I suspect that I'll want to generate the PostScript with another language eventually. I'm tempted to use `bash` so that most anybody could run this without needing to install anything.
+## implementation
 
-I suspect that a web implementation will use `ps2pdf` and embed a pdf viewer.
+I started with hand-coded PostScript of a daily timeline. I'm having a blast building the first bash script to implement settings from the `settings.md` files. I'm intending to do this whole project in bash (with POSIX commands) and PostScript to maximize portability. You can see the bash script progress in the `implement-timeline-builder-shell-script` branch.
 
 ## daily pages
 
@@ -40,8 +40,20 @@ I would like my daily pages to have automatically calculated dates, so that
 will be the next module I build. I'm excited to see how I can get bash (the
 `date` command) and PostScript working together to make that happen.
 
-# TODO
+## usage
 
+To see an example you can open a `.ps` file with most pdf viewers. And then you can replace setting vars. At least until the bash scripts get implemented.
+
+## a todo
+
+- [ ] config
+  - [ ] finalize config file implementation
+    - [ ] easy and predictable to config and run locally
+      - [ ] parser is reliable
+      - [ ] config file is easy to read
+      - [ ] config file is easy to modify
+      - [ ] (bonus) config file is easy to read and modify by laypeople (is this silly?)
+    - [ ] easy and predictable to config and run from web interface
 - [ ] daily timeline
   - [ ] dates
     - [ ] this will probably have to be controlled externally, as I don't think PostScript is handy with dates, and I don't want to make a bespoke date module lol
