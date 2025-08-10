@@ -154,21 +154,25 @@ MAX_WIDTH_GRID=false
 
 DESIRED_ROW_LENGTH=15
 
-# top_margin_width
+################################
+#                              #
+#         tom margin           #
+#      (number as string)      #
+#           >= 0               #
+#                              #
+################################
 
-## (mm)
+TOP_MARGIN_WIDTH="5 mm"
 
-## >= 0
+################################
+#                              #
+#        bottom margin         #
+#      (number as string)      #
+#           >= 0               #
+#                              #
+################################
 
-TOP_MARGIN_WIDTH=5
-
-# bottom_margin
-
-## (mm)
-
-## >= 0
-
-BOTTOM_MARGIN=5
+BOTTOM_MARGIN="5 mm"
 
 # left_margin
 
