@@ -206,34 +206,30 @@ VERTICAL_GRID_ALIGNMENT="center"
 
 ################################
 #                              #
-#   vertical grid alignment    #
+#  horizontal grid alignment   #
 #         (string)             #
-#    top, bottom, or center    #
+#    left, center, or right    #
 #                              #
 ################################
 
-# horizontal_grid_alignment
-
-## left
-
-## center
-
-## right
-
 HORIZONTAL_GRID_ALIGNMENT="center"
 
-# linewidth
-
-## points
-
-## > 0
+################################
+#                              #
+#        line width            #
+#     (number as string)       #
+#           =< 0               #
+#                              #
+################################
 
 LINEWIDTH="0.2"
 
-# fontscale
-
-## (number: point)
-
-## > 0
+################################
+#                              #
+#        font scale            #
+#     (number as string)       #
+#           =< 0               #
+#                              #
+################################
 
 FONTSCALE="cell_height 2 sub"
