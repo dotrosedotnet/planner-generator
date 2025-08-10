@@ -8,7 +8,7 @@
 #                             #
 ###############################
 
-page_size="a6"
+PAGE_SIZE="a6"
 
 ################################
 #                              #
@@ -18,7 +18,7 @@ page_size="a6"
 #                              #
 ################################
 
-page_orientation="landscape"
+PAGE_ORIENTATION="landscape"
 
 ################################
 #                              #
@@ -28,7 +28,7 @@ page_orientation="landscape"
 #                              #
 ################################
 
-page_width=294
+PAGE_WIDTH=294
 
 ################################
 #                              #
@@ -38,7 +38,7 @@ page_width=294
 #                              #
 ################################
 
-page_height=419
+PAGE_HEIGHT=419
 
 ################################
 #                              #
@@ -48,7 +48,7 @@ page_height=419
 #                              #
 ################################
 
-hours=24
+HOURS=24
 
 ################################
 #                              #
@@ -58,7 +58,7 @@ hours=24
 #                              #
 ################################
 
-clock_type=12
+CLOCK_TYPE=12
 
 ################################
 #                              #
@@ -68,7 +68,7 @@ clock_type=12
 #                              #
 ################################
 
-hour_marking_frequency=3
+HOUR_MARKING_FREQUENCY=3
 
 ################################
 #                              #
@@ -78,7 +78,7 @@ hour_marking_frequency=3
 #                              #
 ################################
 
-rows_per_hour=1
+ROWS_PER_HOUR=1
 
 ################################
 #                              #
@@ -89,7 +89,7 @@ rows_per_hour=1
 #                              #
 ################################
 
-first_hour=3
+FIRST_HOUR=3
 
 ################################
 #                              #
@@ -100,7 +100,7 @@ first_hour=3
 #                              #
 ################################
 
-first_hour_marking=3
+FIRST_HOUR_MARKING=3
 
 ################################
 #                              #
@@ -111,7 +111,7 @@ first_hour_marking=3
 #                              #
 ################################
 
-cells_padding_timeline=2
+CELLS_PADDING_TIMELINE=2
 
 ################################
 #                              #
@@ -122,7 +122,7 @@ cells_padding_timeline=2
 #                              #
 ################################
 
-cell_height="3.7"
+CELL_HEIGHT="3.7"
 
 ################################
 #                              #
@@ -133,7 +133,7 @@ cell_height="3.7"
 #                              #
 ################################
 
-cell_width="3.7"
+CELL_WIDTH="3.7"
 
 ################################
 #                              #
@@ -142,7 +142,7 @@ cell_width="3.7"
 #                              #
 ################################
 
-max_width_grid=false
+MAX_WIDTH_GRID=false
 
 ################################
 #                              #
@@ -152,7 +152,7 @@ max_width_grid=false
 #                              #
 ################################
 
-desired_row_length=15
+DESIRED_ROW_LENGTH=15
 
 ################################
 #                              #
@@ -162,7 +162,7 @@ desired_row_length=15
 #                              #
 ################################
 
-top_margin_width="5 mm"
+TOP_MARGIN_WIDTH="5 mm"
 
 ################################
 #                              #
@@ -172,7 +172,7 @@ top_margin_width="5 mm"
 #                              #
 ################################
 
-bottom_margin="5 mm"
+BOTTOM_MARGIN="5 mm"
 
 ################################
 #                              #
@@ -182,7 +182,7 @@ bottom_margin="5 mm"
 #                              #
 ################################
 
-left_margin="6 mm"
+LEFT_MARGIN="6 mm"
 
 ################################
 #                              #
@@ -192,7 +192,7 @@ left_margin="6 mm"
 #                              #
 ################################
 
-right_margin_width="6 mm"
+RIGHT_MARGIN_WIDTH="6 mm"
 
 ################################
 #                              #
@@ -202,7 +202,7 @@ right_margin_width="6 mm"
 #                              #
 ################################
 
-vertical_grid_alignment="center"
+VERTICAL_GRID_ALIGNMENT="center"
 
 ################################
 #                              #
@@ -212,7 +212,7 @@ vertical_grid_alignment="center"
 #                              #
 ################################
 
-horizontal_grid_alignment="center"
+HORIZONTAL_GRID_ALIGNMENT="center"
 
 ################################
 #                              #
@@ -222,7 +222,7 @@ horizontal_grid_alignment="center"
 #                              #
 ################################
 
-linewidth="0.2"
+LINEWIDTH="0.2"
 
 ################################
 #                              #
@@ -232,4 +232,4 @@ linewidth="0.2"
 #                              #
 ################################
 
-fontscale="cell_height 2 sub"
+FONTSCALE="cell_height 2 sub"
