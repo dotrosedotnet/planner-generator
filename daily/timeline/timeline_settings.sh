@@ -174,31 +174,43 @@ TOP_MARGIN_WIDTH="5 mm"
 
 BOTTOM_MARGIN="5 mm"
 
-# left_margin
+################################
+#                              #
+#         left margin          #
+#      (number as string)      #
+#           >= 0               #
+#                              #
+################################
 
-## (mm)
+LEFT_MARGIN="6 mm"
 
-## >= 0
+################################
+#                              #
+#         left margin          #
+#      (number as string)      #
+#           >= 0               #
+#                              #
+################################
 
-LEFT_MARGIN=6
+RIGHT_MARGIN_WIDTH="6 mm"
 
-# right_margin_width
-
-## (mm)
-
-## >= 0
-
-RIGHT_MARGIN_WIDTH=6
-
-# vertical_grid_alignment
-
-## top
-
-## center
-
-## bottom
+################################
+#                              #
+#   vertical grid alignment    #
+#         (string)             #
+#    top, bottom, or center    #
+#                              #
+################################
 
 VERTICAL_GRID_ALIGNMENT="center"
+
+################################
+#                              #
+#   vertical grid alignment    #
+#         (string)             #
+#    top, bottom, or center    #
+#                              #
+################################
 
 # horizontal_grid_alignment
 
