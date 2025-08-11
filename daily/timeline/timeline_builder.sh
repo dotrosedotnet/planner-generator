@@ -24,8 +24,8 @@ fi
 
 # GAMEPLAN
 # - [x] make tmp folder
-# - [x] watch timeline.ps and timeline_settings.md for changes
-# - [ ] generate timeline.tmp.ps from timeline.ps and timeline_settings.md
+# - [x] watch timeline.ps and timeline_settings.sh for changes
+# - [ ] generate timeline.tmp.ps from timeline.ps and timeline_settings.sh
 #   - [ ] use default values if there are no matches
 # - [ ] update timeline.tmp.ps when:
 #   - [x] shell script is changed
@@ -36,6 +36,7 @@ fi
 
 readonly THIS_SCRIPT=$(readlink -f "$0")
 readonly SCRIPT_NAME=$(basename "$0")
+readonly PS_FILE=$(ls | grep .ps)
 # there are 4 instances of `local PS_FILE` (2025-08-07)
 # maybe it should be a global var
 
@@ -70,13 +71,11 @@ trap restart EXIT
 
 mk_tmp_cp_ps() {
   mkdir tmp
-  local PS_FILE=$(ls | grep .ps)
   cp "$PS_FILE" tmp/
 }
 
 start_zathura_on_tmp_ps() {
   # not running this until I track the PID and don't restart if still running
-  local PS_FILE=$(ls | grep .ps)
   zathura tmp/"$PS_FILE" &!
 }
 
@@ -94,32 +93,52 @@ restart_on_script_edit() {
   fi
 }
 
-# source the settings, populate an associative array
-declare -A settings
-create_settings_associative_array() {
-  source timeline_settings.sh
-}
-
 # functions to locate the definitions in the tmp ps file which are to be
 # replaced by settings in the settings file
 #
 # takes in setting key from associative array and locates corresponding value
 # in ps file
-locate_ps_definition_wo_braces() {}
-
-locate_ps_definition_with_braces() {}
-
-# function which finds and replaces a setting in the tmp ps file with a setting
-# in the settings file
+# locate_ps_definition_wo_braces() {}
 #
-# will take in a variable from the settings file, find the corresponding
-# location to overwrite, and overwrite it
-tmp_ps_file_setting_writer() {}
+# locate_ps_definition_with_braces() {}
+#
+# # function which finds and replaces a setting in the tmp ps file with a setting
+# # in the settings file
+# #
+# # will take in a variable from the settings file, find the corresponding
+# # location to overwrite, and overwrite it
+# tmp_ps_file_setting_writer() {}
+
+# source the settings, populate an associative array
+# declare -A settings
+create_settings_associative_array() {
+  local SETTINGS_FILE="${PS_FILE%.*}_settings.sh"
+  local SETTINGS_LINES=$(grep -ve "^#" -e "^$" "$SETTINGS_FILE")
+  # if settings was most recently edited file:
+  #  echo "settings updated, recopying to tmp file "
+  while IFS= read -r line; do
+    #
+    # find the line in the file, and find the next instance of line beginning
+    # with alphanumeric chars, as that will be the corresponding setting 
+    #
+    # local setting_name_line_first_char=$(echo line)
+    # echo "$line"
+    local -A settings
+    # setting names
+    echo "$line"
+    echo "$line" | awk -F'=' '{print $1}'
+    echo "$line" | awk -F'=' '{print $2}'
+    # local SETTING_NAME=$(echo "$line" | awk '{print $2}')
+    # echo "$SETTING_NAME"\:
+    # awk '/'"$line"'/{found=1; next} found && /^\w/{print; exit}' "$SETTINGS_FILE"
+  done <<< "$SETTINGS_LINES"
+}
+
+create_settings_associative_array
 
 update_tmp_ps_settings() {
-  local PS_FILE=$(ls | grep .ps)
-  local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
-  local SETTINGS_NAME_LINES=$(grep "^# " "$SETTINGS_FILE")
+  local SETTINGS_FILE="${PS_FILE%.*}_settings.sh"
+  local SETTINGS_LINES=$(grep "^# " "$SETTINGS_FILE")
   # if settings was most recently edited file:
   #  echo "settings updated, recopying to tmp file "
   while IFS= read -r line; do
@@ -130,12 +149,11 @@ update_tmp_ps_settings() {
     local SETTING_NAME=$(echo "$line" | awk '{print $2}')
     # echo "$SETTING_NAME"\:
     # awk '/'"$line"'/{found=1; next} found && /^\w/{print; exit}' "$SETTINGS_FILE"
-  done <<< "$SETTINGS_NAME_LINES"
+  done <<< "$SETTINGS_LINES"
   echo "=========="$'\n'
 }
 
 recopy_ps_on_ps_edit() {
-  local PS_FILE=$(ls | grep .ps)
   local EDITED_FILE=$(ls -1tr | tail -1)
   if [[ "$EDITED_FILE" == "$PS_FILE" ]]; then
     cleanup
