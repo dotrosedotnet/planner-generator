@@ -93,16 +93,13 @@ restart_on_script_edit() {
   fi
 }
 
-# functions to locate the definitions in the tmp ps file which are to be
-# replaced by settings in the settings file
-#
-# takes in setting key from associative array and locates corresponding value
-# in ps file
+# # takes in setting key from associative array and locates corresponding value
+# # in ps file
 # locate_ps_definition_wo_braces() {}
 #
 # locate_ps_definition_with_braces() {}
 #
-# # function which finds and replaces a setting in the tmp ps file with a setting
+# # function which replaces a setting in the tmp ps file with a setting
 # # in the settings file
 # #
 # # will take in a variable from the settings file, find the corresponding
