@@ -94,6 +94,28 @@ restart_on_script_edit() {
   fi
 }
 
+# source the settings, populate an associative array
+declare -A settings
+create_settings_associative_array() {
+  source timeline_settings.sh
+}
+
+# functions to locate the definitions in the tmp ps file which are to be
+# replaced by settings in the settings file
+#
+# takes in setting key from associative array and locates corresponding value
+# in ps file
+locate_ps_definition_wo_braces() {}
+
+locate_ps_definition_with_braces() {}
+
+# function which finds and replaces a setting in the tmp ps file with a setting
+# in the settings file
+#
+# will take in a variable from the settings file, find the corresponding
+# location to overwrite, and overwrite it
+tmp_ps_file_setting_writer() {}
+
 update_tmp_ps_settings() {
   local PS_FILE=$(ls | grep .ps)
   local SETTINGS_FILE="${PS_FILE%.*}_settings.md"
