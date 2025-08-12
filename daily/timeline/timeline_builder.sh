@@ -43,7 +43,7 @@ readonly PS_FILE=$(ls | grep .ps)
 cleanup() {
   echo "Cleaning up..."
   rm -rvf tmp
-  echo "Cleanup complete."
+  echo -e "Cleanup complete.\n"
 }
 
 sigint_proc() {
@@ -86,8 +86,8 @@ print_changed_file() {
 restart_on_script_edit() {
   local EDITED_FILE=$(ls -1tr | tail -1)
   if [[ "$EDITED_FILE" == "$SCRIPT_NAME" ]]; then
-    cleanup
     echo $'\n'"script file edited. restarting script."$'\n'
+    cleanup
     sleep 2
     exec "$THIS_SCRIPT"
   fi
@@ -120,7 +120,11 @@ create_settings_associative_array() {
     local setting_val=$(echo "$line" | awk -F'=' '{print $2}')
     settings["$setting_key"]="$setting_val"
   done <<< "$SETTINGS_LINES"
-  echo ${!settings[@]}
+  for key in ${!settings[@]}
+  do
+    echo "$key"\ is\ "${settings[${key}]}"
+  done
+  
 }
 
 create_settings_associative_array
@@ -169,7 +173,7 @@ watch_files() {
 }
 
 main() {
-  echo "script started"$'\n'
+  echo -e "\nScript started.\n"
   mk_tmp_cp_ps
   watch_files
   cleanup
