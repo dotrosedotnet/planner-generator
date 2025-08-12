@@ -113,22 +113,14 @@ create_settings_associative_array() {
   local SETTINGS_LINES=$(grep -ve "^#" -e "^$" "$SETTINGS_FILE")
   # if settings was most recently edited file:
   #  echo "settings updated, recopying to tmp file "
+  local -A settings
   while IFS= read -r line; do
-    #
-    # find the line in the file, and find the next instance of line beginning
-    # with alphanumeric chars, as that will be the corresponding setting 
-    #
-    # local setting_name_line_first_char=$(echo line)
     # echo "$line"
-    local -A settings
-    # setting names
-    echo "$line"
-    echo "$line" | awk -F'=' '{print $1}'
-    echo "$line" | awk -F'=' '{print $2}'
-    # local SETTING_NAME=$(echo "$line" | awk '{print $2}')
-    # echo "$SETTING_NAME"\:
-    # awk '/'"$line"'/{found=1; next} found && /^\w/{print; exit}' "$SETTINGS_FILE"
+    local setting_key=$(echo "$line" | awk -F'=' '{print $1}')
+    local setting_val=$(echo "$line" | awk -F'=' '{print $2}')
+    settings["$setting_key"]="$setting_val"
   done <<< "$SETTINGS_LINES"
+  echo ${!settings[@]}
 }
 
 create_settings_associative_array
