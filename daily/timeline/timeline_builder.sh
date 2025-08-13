@@ -70,8 +70,17 @@ trap sigint_proc SIGINT
 trap restart EXIT
 
 mk_tmp_cp_ps() {
+  echo "making tmp folder"
   mkdir tmp
+  echo "copying ps file to tmp folder"
   cp "$PS_FILE" tmp/
+}
+
+pdf_convert() {
+  # requires ghostscript
+  pdf_name=$(echo $PS_FILE | awk -F'.' '{print $1}')".pdf"
+  echo "converting ps to pdf in tmp folder"
+  ps2pdf tmp/"$PS_FILE" tmp/"$pdf_name"
 }
 
 start_zathura_on_tmp_ps() {
@@ -153,6 +162,7 @@ recopy_ps_on_ps_edit() {
     echo $'\n'"PS source edited. recopying to tmp"$'\n'
     # update_tmp_ps_settings
     mk_tmp_cp_ps
+    pdf_convert
   fi
 }
 
@@ -175,6 +185,7 @@ watch_files() {
 main() {
   echo -e "\nScript started.\n"
   mk_tmp_cp_ps
+  pdf_convert
   watch_files
   cleanup
 }
